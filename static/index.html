@@ -3,10 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #mapid {
+            height: 100vh;
+        }
+
+        #search-view {
+            width: 250px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 999999;
+            background: white;
+            box-shadow: 5px 10px #888888;
+            {#border-radius: 8px;#}
+        }
+
+        .search-view-header {
+            background: orangered;
+            color: white;
+            padding: 4px 8px;
+        }
+
+        .search-view-section {
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .sv-input {
+            align-self: end;
+            width: 70%;
+        }
+    </style>
 </head>
 <body>
-<h1>
-    I am Groot.
-</h1>
+<div id="mapid"></div>
+<div id="search-view">
+    <div class="search-view-header">
+        <p>Art's Open Routing Experience</p>
+    </div>
+    <div class="search-view-section">
+        <span>
+            Start:
+        </span>
+        <input class="input sv-input" placeholder="Kilkee...">
+        <br>
+        <span>
+            End:
+        </span>
+        <input class="input sv-input" placeholder="Ennis...">
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+<script>
+    const mymap = L.map('mapid').setView([53.417717, -7.945862], 7);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'
+    }).addTo(mymap);
+    mymap.zoomControl.remove();
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(mymap);
+</script>
 </body>
 </html>
