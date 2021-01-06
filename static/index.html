@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>DFOSM</title>
+    <script src="https://use.fontawesome.com/291859f4e0.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
+    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <style>
         body {
             margin: 0;
@@ -17,57 +23,133 @@
         }
 
         #search-view {
-            width: 250px;
+            width: 350px;
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 999999;
             background: white;
-            box-shadow: 5px 10px #888888;
-            {#border-radius: 8px;#}
+            overflow: hidden;
+        {#box-shadow: 5px 10px #888888;#}{#border-radius: 8px;#}
         }
 
         .search-view-header {
-            background: orangered;
+            margin: -20px -20px 0 -20px;
+            background: darkgreen;
             color: white;
+            font-weight: bold;
+            font-size: large;
+            letter-spacing: 0.02em;
             padding: 4px 8px;
+            text-align: center;
+        }
+
+        #transport-icons {
+            margin: 8px;
+            display: flex;
+            justify-content: center;
+            letter-spacing: 12px;
+        }
+
+        .sv-icon {
+            font-size: 1.3rem;
         }
 
         .search-view-section {
             padding: 8px;
-            display: flex;
             flex-wrap: wrap;
+        }
+
+        .sv-label {
+            font-weight: bold;
         }
 
         .sv-input {
             align-self: end;
             width: 70%;
         }
+
+        #add-node {
+            padding: 4px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #checkbox-search-btn {
+            padding: 12px 8px;
+        }
+
+        #search-btn {
+            float: right;
+        }
+
+        .start-end-strong {
+            padding-left: 12px;
+            margin: 4px;
+        }
+
     </style>
 </head>
 <body>
 <div id="mapid"></div>
-<div id="search-view">
+<div id="search-view" class="box">
     <div class="search-view-header">
         <p>Art's Open Routing Experience</p>
     </div>
     <div class="search-view-section">
-        <span>
-            Start:
-        </span>
-        <input class="input sv-input" placeholder="Kilkee...">
-        <br>
-        <span>
-            End:
-        </span>
-        <input class="input sv-input" placeholder="Ennis...">
+            <div class="card" style="padding: 8px">
+        <div id="transport-icons">
+        <span class="icon-text">
+              <span class="sv-icon content">
+                <i class="fa fa-car" style="color: darkgreen;"> </i>
+              </span>
+              <span class="sv-icon">
+                <i class="fa fa-bicycle"></i>
+              </span>
+              <span class="sv-icon">
+                <i class="fa fa-blind"></i>
+              </span>
+              <span class="sv-icon">
+                <i class="fa fa-bus"></i>
+              </span>
+              <span class="sv-icon">
+                <i class="fa fa-truck"></i>
+              </span>
+            </span>
+        </div>
+        <div class="sv-label">
+            <strong class="start-end-strong">Start</strong>
+            <input id="start-node" class="input is-rounded" type="text" placeholder="Search starting point">
+        </div>
+        <div id="add-node" style="margin-top: 12px; font-size: 1.3rem">
+            <i class="fa fa-plus-square"></i>
+        </div>
+        <div class="sv-label">
+            <strong class="start-end-strong">End</strong>
+            <input class="input is-rounded" type="text" placeholder="Search destination">
+        </div>
+        <div id="checkbox-search-btn">
+            <span id="checkbox"><label class="checkbox">
+  <input type="checkbox">
+  Avoid Tolls
+</label></span>
+            <span id="search-btn">
+            <button class="button is-success">
+    <span>Go</span>
+    <span class="icon is-small">
+      <i class="fa fa-check"></i>
+    </span>
+  </button></span>
+        </div>
     </div>
+                </div>
 </div>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
 <script>
-    const mymap = L.map('mapid').setView([53.417717, -7.945862], 7);
+    const map = L.map('mapid').setView([53.417717, -7.945862], 7);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -75,11 +157,25 @@
         tileSize: 512,
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'
-    }).addTo(mymap);
-    mymap.zoomControl.remove();
+    }).addTo(map);
+    map.zoomControl.remove();
     L.control.zoom({
         position: 'bottomright'
-    }).addTo(mymap);
+    }).addTo(map);
+
+    const search = new GeoSearch.GeoSearchControl({
+        provider: new GeoSearch.OpenStreetMapProvider(),
+    });
+    map.addControl(search);
+
+    searchA = document.getElementById("start-node");
+    const inputHandler = function(e) {
+        console.log(e.target.value);
+
+        //query geonames
+
+    }
+    searchA.addEventListener('input', inputHandler);
 </script>
 </body>
 </html>
