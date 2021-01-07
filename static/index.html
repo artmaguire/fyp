@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
-    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
     <style>
@@ -97,7 +93,7 @@
         <p>Art's Open Routing Experience</p>
     </div>
     <div class="search-view-section">
-            <div class="card" style="padding: 8px">
+            <div class="card">
         <div id="transport-icons">
         <span class="icon-text">
               <span class="sv-icon content">
@@ -117,6 +113,7 @@
               </span>
             </span>
         </div>
+                </div>
         <div class="sv-label">
             <strong class="start-end-strong">Start</strong>
             <input id="start-node" class="input is-rounded" type="text" placeholder="Search starting point">
@@ -142,40 +139,11 @@
   </button></span>
         </div>
     </div>
-                </div>
 </div>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
-<script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
-<script>
-    const map = L.map('mapid').setView([53.417717, -7.945862], 7);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'
-    }).addTo(map);
-    map.zoomControl.remove();
-    L.control.zoom({
-        position: 'bottomright'
-    }).addTo(map);
-
-    const search = new GeoSearch.GeoSearchControl({
-        provider: new GeoSearch.OpenStreetMapProvider(),
-    });
-    map.addControl(search);
-
-    searchA = document.getElementById("start-node");
-    const inputHandler = function(e) {
-        console.log(e.target.value);
-
-        //query geonames
-
-    }
-    searchA.addEventListener('input', inputHandler);
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.js"></script>
+<script src="static/js/map.js"></script>
 </body>
 </html>

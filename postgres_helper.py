@@ -16,3 +16,10 @@ def get_location_name(name):
     name += '%'
     cur.execute("SELECT * FROM osm_places WHERE name ILIKE %s LIMIT 10", (name,))
     return cur.fetchall()
+
+
+
+def get_geo_name(name):
+    name += '%'
+    cur.execute("SELECT * FROM osm_places WHERE name ILIKE %s LIMIT 10", (name,))
+    return cur.fetchall()
