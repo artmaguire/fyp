@@ -13,78 +13,8 @@
         body {
             margin: 0;
         }
-
-        #mapid {
-            height: 100vh;
-        }
-
-        #search-view {
-            width: 350px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 999999;
-            background: white;
-            overflow: hidden;
-        {#box-shadow: 5px 10px #888888;#}{#border-radius: 8px;#}
-        }
-
-        .search-view-header {
-            margin: -20px -20px 0 -20px;
-            background: darkgreen;
-            color: white;
-            font-weight: bold;
-            font-size: large;
-            letter-spacing: 0.02em;
-            padding: 4px 8px;
-            text-align: center;
-        }
-
-        #transport-icons {
-            margin: 8px;
-            display: flex;
-            justify-content: center;
-            letter-spacing: 12px;
-        }
-
-        .sv-icon {
-            font-size: 1.3rem;
-        }
-
-        .search-view-section {
-            padding: 8px;
-            flex-wrap: wrap;
-        }
-
-        .sv-label {
-            font-weight: bold;
-        }
-
-        .sv-input {
-            align-self: end;
-            width: 70%;
-        }
-
-        #add-node {
-            padding: 4px;
-            display: flex;
-            justify-content: center;
-        }
-
-        #checkbox-search-btn {
-            padding: 12px 8px;
-        }
-
-        #search-btn {
-            float: right;
-        }
-
-        .start-end-strong {
-            padding-left: 12px;
-            margin: 4px;
-        }
-
     </style>
+    <link rel="stylesheet" href="/static/css/search.css">
 </head>
 <body>
 <div id="mapid"></div>
@@ -93,8 +23,8 @@
         <p>Art's Open Routing Experience</p>
     </div>
     <div class="search-view-section">
-            <div class="card">
-        <div id="transport-icons">
+        <div class="card">
+            <div id="transport-icons">
         <span class="icon-text">
               <span class="sv-icon content">
                 <i class="fa fa-car" style="color: darkgreen;"> </i>
@@ -112,18 +42,30 @@
                 <i class="fa fa-truck"></i>
               </span>
             </span>
+            </div>
         </div>
-                </div>
         <div class="sv-label">
             <strong class="start-end-strong">Start</strong>
-            <input id="start-node" class="input is-rounded" type="text" placeholder="Search starting point">
+            <input v-model.trim="startNode" v-on:keyup="searchStartChange" @focus="startInputFocus = true" @blur="startInputFocus = false" id="start-node" class="input is-rounded"
+                   type="text" placeholder="Search starting point">
+            <div v-if="startSearchResults" class="card sv-suggestions-box">
+                <ul class="menu-list">
+                    <li v-for="result in startSearchResults" @click="searchSelected(result)"><a>{{ result.name }}</a></li>
+                </ul>
+            </div>
         </div>
         <div id="add-node" style="margin-top: 12px; font-size: 1.3rem">
             <i class="fa fa-plus-square"></i>
         </div>
         <div class="sv-label">
             <strong class="start-end-strong">End</strong>
-            <input class="input is-rounded" type="text" placeholder="Search destination">
+            <input v-model.trim="endNode" v-on:keyup="searchEndChange" @focus="endInputFocus = true" @blur="endInputFocus = false" class="input is-rounded" type="text"
+                   placeholder="Search destination">
+            <div v-if="endInputFocus && endSearchResults" class="card sv-suggestions-box">
+                <ul class="menu-list">
+                    <li v-for="result in endSearchResults"><a>{{ result.name }}</a></li>
+                </ul>
+            </div>
         </div>
         <div id="checkbox-search-btn">
             <span id="checkbox"><label class="checkbox">
@@ -140,10 +82,12 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.js"></script>
-<script src="static/js/map.js"></script>
+<script src="/static/js/map.js"></script>
+<script src="/static/js/search.js"></script>
 </body>
 </html>

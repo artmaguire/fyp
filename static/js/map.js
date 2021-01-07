@@ -13,15 +13,14 @@ L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
 
-const socket = io();
-socket.on('connect', function () {
-});
-socket.on('geoname_result', (geonames) => {
-    console.log(geonames)
-});
+const markerMap = new Map();
 
-searchA = document.getElementById("start-node");
-const inputHandler = function (e) {
-    socket.emit('geoname_search', {data: e.target.value});
+function addMarker(name, lat, lon, key) {
+    if (markerMap.has(key))
+          map.removeLayer(markerMap.get(key));
+
+    const marker = L.marker([lat, lon]).addTo(map);
+    marker.bindPopup("<b>" + name + "</b><br>I am a popup.").openPopup();
+
+    markerMap.set(key, marker);
 }
-searchA.addEventListener('input', inputHandler);

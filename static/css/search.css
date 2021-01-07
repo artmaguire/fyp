@@ -1,0 +1,74 @@
+#mapid {
+    height: 100vh;
+}
+
+#search-view {
+    width: 350px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 999999;
+    background: white;
+    overflow: hidden;
+}
+
+.search-view-header {
+    margin: -20px -20px 0 -20px;
+    background: darkgreen;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    letter-spacing: 0.02em;
+    padding: 4px 8px;
+    text-align: center;
+}
+
+#transport-icons {
+    margin: 8px;
+    display: flex;
+    justify-content: center;
+    letter-spacing: 12px;
+}
+
+.sv-icon {
+    font-size: 1.3rem;
+}
+
+.search-view-section {
+    padding: 8px;
+    flex-wrap: wrap;
+}
+
+.sv-label {
+    font-weight: bold;
+}
+
+.sv-input {
+    align-self: end;
+    width: 70%;
+}
+
+#add-node {
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+}
+
+#checkbox-search-btn {
+    padding: 12px 8px;
+}
+
+#search-btn {
+    float: right;
+}
+
+.start-end-strong {
+    padding-left: 12px;
+    margin: 4px;
+}
+
+.sv-suggestions-box {
+    position: absolute;
+    width: 84%;
+    z-index: 19;
+}

@@ -1,18 +1,25 @@
 import requests, json
 from flask import Flask, jsonify, request
-from postgres_helper import get_location_name, get_geo_name, open_connection, close_connection
+from postgres_helper import get_location_name, open_connection, close_connection
 from flask_socketio import SocketIO, send, emit
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+open_connection()
+
 
 @socketio.on('geoname_search')
 def handle_geoname(data):
-    params = {'maxRows': '5', 'username': 'aosm', 'name_startsWith': data.get('data')}
-    r = requests.get('http://api.geonames.org/searchJSON', params=params)
-    print(r.json())
-    emit('geoname_result', 'message')
+    print(data)
+    geonames = get_location_name(data.get('query'))
+    print(geonames)
+    result = {"node": data.get("node"), "geonames": geonames}
+    emit('geoname_result', result)
 
 
 @app.route('/')
@@ -32,5 +39,5 @@ def search():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
     socketio.run(app)
