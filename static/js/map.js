@@ -33,7 +33,7 @@ function panToNode(lat, lon) {
     map.setView(L.latLng(lat, lon), 12, {
         "animate": true,
         "pan": {
-            "duration": 10
+            "duration": 1
         }
     });
 }

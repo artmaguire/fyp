@@ -32,9 +32,9 @@
               <span class="sv-icon">
                 <i class="fa fa-bicycle"></i>
               </span>
-              <span class="sv-icon">
+              <button class="sv-icon button is-small">
                 <i class="fa fa-blind"></i>
-              </span>
+              </button>
               <span class="sv-icon">
                 <i class="fa fa-bus"></i>
               </span>
@@ -49,14 +49,18 @@
             <!-- Templating for search nodes, done by Vue Component -->
             <node-search :id="0"></node-search>
         </div>
-        <div id="add-node" style="margin-top: 12px; font-size: 1.3rem">
+        <template v-for="(child, index) in additionalNodes">
+            <hr style="margin: 4px;">
+            <component :is="child" :id="index+1"></component>
+        </template>
+        <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
             <i class="fa fa-plus-square"></i>
-        </div>
+        </button>
 
         <div class="sv-label">
             <strong class="start-end-strong">End</strong>
             <!-- Templating for search nodes, done by Vue Component -->
-            <node-search :id="1"></node-search>
+            <node-search :id="-1"></node-search>
         </div>
         <div id="checkbox-search-btn">
             <span id="checkbox"><label class="checkbox">

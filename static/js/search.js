@@ -1,8 +1,12 @@
 const search = new Vue({
     el: '#search-view',
-    data: { },
+    data: {
+        additionalNodes: []
+    },
     methods: {
-
+        addNode() {
+            this.additionalNodes.push(nodeSearch);
+        }
     }
 })
 

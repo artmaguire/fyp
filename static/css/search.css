@@ -48,10 +48,12 @@
     width: 70%;
 }
 
-#add-node {
+.add-node {
     padding: 4px;
     display: flex;
-    justify-content: center;
+    font-size: 1.3rem;
+    height: 100%;
+    margin: 12px auto 12px auto;
 }
 
 #checkbox-search-btn {

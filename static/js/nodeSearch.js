@@ -1,7 +1,7 @@
 // Create a Vue Component for the node searching and dropdown lost of search results
 // This can be reused for all node searches
 // Templating for searching
-Vue.component('node-search', {
+let nodeSearch = Vue.component('node-search', {
     data: function () {
         return {
             nodeInput: '',
@@ -33,8 +33,8 @@ Vue.component('node-search', {
         }
     },
     template: `<div>
-                    <input v-model.trim="nodeInput" v-on:keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                           autocomplete="off" type="text" placeholder="Enter location">
+                    <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
+                           style="font-size: 0.83rem;" autocomplete="off" type="text" placeholder="Enter location">
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
                             <ul class="menu-list">
