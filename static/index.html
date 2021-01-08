@@ -46,26 +46,17 @@
         </div>
         <div class="sv-label">
             <strong class="start-end-strong">Start</strong>
-            <input v-model.trim="startNode" v-on:keyup="searchStartChange" @focus="startInputFocus = true" @blur="startInputFocus = false" id="start-node" class="input is-rounded"
-                   type="text" placeholder="Search starting point">
-            <div v-if="startSearchResults" class="card sv-suggestions-box">
-                <ul class="menu-list">
-                    <li v-for="result in startSearchResults" @click="searchSelected(result)"><a>{{ result.name }}</a></li>
-                </ul>
-            </div>
+            <!-- Templating for search nodes, done by Vue Component -->
+            <node-search :id="0"></node-search>
         </div>
         <div id="add-node" style="margin-top: 12px; font-size: 1.3rem">
             <i class="fa fa-plus-square"></i>
         </div>
+
         <div class="sv-label">
             <strong class="start-end-strong">End</strong>
-            <input v-model.trim="endNode" v-on:keyup="searchEndChange" @focus="endInputFocus = true" @blur="endInputFocus = false" class="input is-rounded" type="text"
-                   placeholder="Search destination">
-            <div v-if="endInputFocus && endSearchResults" class="card sv-suggestions-box">
-                <ul class="menu-list">
-                    <li v-for="result in endSearchResults"><a>{{ result.name }}</a></li>
-                </ul>
-            </div>
+            <!-- Templating for search nodes, done by Vue Component -->
+            <node-search :id="1"></node-search>
         </div>
         <div id="checkbox-search-btn">
             <span id="checkbox"><label class="checkbox">
@@ -87,7 +78,10 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.js"></script>
-<script src="/static/js/map.js"></script>
+<script src="/static/js/vue-socket.io-ext.min.js"></script>
+<script src="/static/js/socket.js"></script>
+<script src="/static/js/nodeSearch.js"></script>
 <script src="/static/js/search.js"></script>
+<script src="/static/js/map.js"></script>
 </body>
 </html>
