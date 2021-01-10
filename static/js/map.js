@@ -1,4 +1,5 @@
 // Leaflet JS OpenStreetMapMapbox Map
+// Default view is in Ireland
 const map = L.map('mapid').setView([53.417717, -7.945862], 7);
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -20,7 +21,7 @@ function addMarker(name, lat, lon, key) {
         map.removeLayer(markerMap.get(key));
 
     const marker = L.marker([lat, lon]).addTo(map);
-    marker.bindPopup("<b>" + name + "</b><br>I am a popup.").openPopup();
+    marker.bindPopup("<b>" + name).openPopup();
 
     markerMap.set(key, marker);
     if (markerMap.size > 1)
@@ -41,4 +42,26 @@ function panToNode(lat, lon) {
 function panToMarkers() {
     let group = new L.featureGroup(Array.from(markerMap.values()));
     map.fitBounds(group.getBounds());
+}
+
+function displayRoute() {
+    // Check if marker map has atleast 2 node
+    // Call map method to display
+    if (markerMap.size >= 2) {
+        // console.log(t['0']['_latlng']['lat'])
+        let waypoints = []
+
+        for (let value of markerMap.values()) {
+            waypoints.push(L.latLng(value['_latlng']['lat'], value['_latlng']['lng']))
+        }
+
+        L.Routing.control({
+            router: L.Routing.mapbox('pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'),
+            waypoints: waypoints
+        }).addTo(map);
+    } else {
+        // TODO: Add modal or popup
+        alert('You haven\'t selected a start and end point!');
+        console.log('Not enough nodes')
+    }
 }

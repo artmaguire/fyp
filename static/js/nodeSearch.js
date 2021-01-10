@@ -20,6 +20,7 @@ let nodeSearch = Vue.component('node-search', {
         closeSearchList: function () {
             setTimeout(() => {
                 this.isSearching = false
+                this.isSearching = false
             }, 120);
         }
     },

@@ -9,6 +9,9 @@
           crossorigin=""/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+
     <style>
         body {
             margin: 0;
@@ -66,9 +69,10 @@
             <span id="checkbox"><label class="checkbox">
   <input type="checkbox">
   Avoid Tolls
-</label></span>
+</label>
+            </span>
             <span id="search-btn">
-            <button class="button is-success">
+            <button class="button is-success" @click="goButtonClick">
     <span>Go</span>
     <span class="icon is-small">
       <i class="fa fa-check"></i>
@@ -83,6 +87,8 @@
         crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.js"></script>
 <script src="/static/js/vue-socket.io-ext.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="/static/js/socket.js"></script>
 <script src="/static/js/nodeSearch.js"></script>
 <script src="/static/js/search.js"></script>

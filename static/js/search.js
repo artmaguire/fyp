@@ -6,9 +6,12 @@ const search = new Vue({
     methods: {
         addNode() {
             this.additionalNodes.push(nodeSearch);
+        },
+        goButtonClick: function () {
+            displayRoute();
         }
     }
-})
+});
 
 // Enum for start and node
 const nodes = {
