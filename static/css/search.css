@@ -4,7 +4,7 @@
 
 /*Removes the scroll bar*/
 html, body {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 #search-view {
@@ -44,21 +44,40 @@ html, body {
     flex-wrap: wrap;
 }
 
+.sv-inputs {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.sv-container {
+    display: flex;
+}
+
+.sv-item {
+    margin: 4px;
+}
+
 .sv-label {
+    margin-top: 7px;
+    font-size: 1.05rem;
     font-weight: bold;
+}
+
+.button {
+    border: none;
+    background: none;
 }
 
 .sv-input {
     align-self: end;
-    width: 70%;
+    width: 80%;
 }
 
 .add-node {
     padding: 4px;
-    display: flex;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     height: 100%;
-    margin: 12px auto 12px auto;
+    margin: 4px auto 4px auto;
 }
 
 #checkbox-search-btn {

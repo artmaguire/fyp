@@ -33,9 +33,16 @@ let nodeSearch = Vue.component('node-search', {
             this.searchResults = data.geonames;
         }
     },
-    template: `<div>
-                    <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                           style="font-size: 0.83rem;" autocomplete="off" type="text" placeholder="Enter location">
+    template: `<div class="sv-container">
+                    <div class="sv-label sv-item">
+                        <strong class="start-end-strong" v-if="this.id === 0">S</strong>
+                        <strong class="start-end-strong" v-else-if="this.id === -1">E</strong>
+                        <strong class="start-end-strong" v-else>{{ id }}</strong>
+                    </div>
+                    <div class="sv-input sv-item">
+                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
+                               style="font-size: 0.83rem;" autocomplete="off" type="text" placeholder="Enter location">
+                    </div>
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
                             <ul class="menu-list">

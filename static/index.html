@@ -47,33 +47,32 @@
             </span>
             </div>
         </div>
-        <div class="sv-label">
-            <strong class="start-end-strong">Start</strong>
+        <div class="sv-inputs">
             <!-- Templating for search nodes, done by Vue Component -->
             <node-search :id="0"></node-search>
-        </div>
-        <template v-for="(child, index) in additionalNodes">
-            <hr style="margin: 4px;">
-            <component :is="child" :id="index+1"></component>
-        </template>
-        <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
-            <i class="fa fa-plus-square"></i>
-        </button>
+            <template v-for="(child, index) in additionalNodes">
+                <hr style="margin: 2px;">
+                <component :is="child" :id="index+1"></component>
+            </template>
+            <hr style="margin: 2px;">
 
-        <div class="sv-label">
-            <strong class="start-end-strong">End</strong>
             <!-- Templating for search nodes, done by Vue Component -->
             <node-search :id="-1"></node-search>
         </div>
-        <div id="checkbox-search-btn">
-
-            <span id="search-btn">
-            <button class="button is-success" @click="goButtonClick">
-    <span>Go</span>
-    <span class="icon is-small">
-      <i class="fa fa-check"></i>
-    </span>
-  </button></span>
+        <div id="checkbox-search-btn sv-container">
+            <div class="sv-item">
+                <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <div id="search-btn">
+                    <button class="button is-success" @click="goButtonClick">
+                        <span>Go</span>
+                        <div class="icon is-small">
+                            <i class="fa fa-check"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
