@@ -2,6 +2,11 @@
     height: 100vh;
 }
 
+/*Removes the scroll bar*/
+html, body {
+  overflow: hidden;
+}
+
 #search-view {
     width: 350px;
     position: absolute;
