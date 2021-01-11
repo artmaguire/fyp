@@ -93,8 +93,10 @@ html, body {
     margin: 4px;
 }
 
-.sv-suggestions-wrapper {
+.sv-suggestions-box-wrapper {
     position: absolute;
+    margin-left: 40px;
+    margin-top: 36px;
 }
 
 .sv-suggestions-box {
