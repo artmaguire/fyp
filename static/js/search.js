@@ -5,10 +5,10 @@ const search = new Vue({
     },
     methods: {
         addNode() {
-            this.additionalNodes.push(nodeSearch);
+            this.additionalNodes.push({id: Math.random(), component: nodeSearch});
         },
         goButtonClick: function () {
-            displayRoute();
+            displayRoute(this.additionalNodes.map(x => x.id));
         }
     }
 });
@@ -16,5 +16,5 @@ const search = new Vue({
 // Enum for start and node
 const nodes = {
     START: 0,
-    END: 1
+    END: -1
 };

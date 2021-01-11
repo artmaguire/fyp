@@ -31,6 +31,13 @@ function addMarker(name, lat, lon, key) {
         panToNode(lat, lon)
 }
 
+function removeMarker(markerId) {
+    let marker = markerMap.get(markerId)
+    markerMap.delete(markerId)
+
+    map.removeLayer(marker)
+}
+
 function panToNode(lat, lon) {
     map.setView(L.latLng(lat, lon), 12, {
         "animate": true,
@@ -45,24 +52,34 @@ function panToMarkers() {
     map.fitBounds(group.getBounds());
 }
 
-function displayRoute() {
+// Get the lat, lon for a given marker
+function getCoords(marker) {
+    return L.latLng(marker['_latlng']['lat'], marker['_latlng']['lng'])
+}
+
+function displayRoute(additionalNodes) {
     // Check if marker map has atleast 2 node
     // Call map method to display
-    if (markerMap.size >= 2) {
-        // console.log(t['0']['_latlng']['lat'])
-        let waypoints = []
 
-        for (let value of markerMap.values()) {
-            waypoints.push(L.latLng(value['_latlng']['lat'], value['_latlng']['lng']))
-        }
-
-        L.Routing.control({
-            router: L.Routing.mapbox(mapboxAccessToken),
-            waypoints: waypoints
-        }).addTo(map);
-    } else {
+    if (markerMap.size < 2 || !markerMap.has(nodes.START) || !markerMap.has(nodes.END)) {
         // TODO: Add modal or popup
         alert('You haven\'t selected a start and end point!');
         console.log('Not enough nodes')
+        return;
     }
+
+    let waypoints = []
+    waypoints.push(getCoords(markerMap.get(nodes.START)))
+
+    for (let id of additionalNodes) {
+        let marker = markerMap.get(id);
+        waypoints.push(getCoords(marker));
+    }
+
+    waypoints.push(getCoords(markerMap.get(nodes.END)))
+
+    L.Routing.control({
+        router: L.Routing.mapbox(mapboxAccessToken),
+        waypoints: waypoints
+    }).addTo(map);
 }

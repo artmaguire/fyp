@@ -20,11 +20,10 @@ let nodeSearch = Vue.component('node-search', {
         closeSearchList: function () {
             setTimeout(() => {
                 this.isSearching = false
-                this.isSearching = false
             }, 120);
         }
     },
-    props: {id: Number},
+    props: {id: Number, index: Number},
     sockets: {
         geoname_result(data) {
             if (data.node !== this.id)
@@ -35,9 +34,9 @@ let nodeSearch = Vue.component('node-search', {
     },
     template: `<div class="sv-container">
                     <div class="sv-label sv-item">
-                        <strong class="start-end-strong" v-if="this.id === 0">S</strong>
-                        <strong class="start-end-strong" v-else-if="this.id === -1">E</strong>
-                        <strong class="start-end-strong" v-else>{{ id }}</strong>
+                        <strong class="start-end-strong" v-if="this.index === 0">S</strong>
+                        <strong class="start-end-strong" v-else-if="this.index === -1">E</strong>
+                        <strong class="start-end-strong" v-else>{{ index }}</strong>
                     </div>
                     <div class="sv-input sv-item">
                         <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n

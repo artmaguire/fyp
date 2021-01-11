@@ -49,15 +49,15 @@
         </div>
         <div class="sv-inputs">
             <!-- Templating for search nodes, done by Vue Component -->
-            <node-search :id="0"></node-search>
+            <node-search :id="0" :index="0"></node-search>
             <template v-for="(child, index) in additionalNodes">
                 <hr style="margin: 2px;">
-                <component :is="child" :id="index+1"></component>
+                <component :is="child.component" :id="child.id" :index="index+1"></component>
             </template>
             <hr style="margin: 2px;">
 
             <!-- Templating for search nodes, done by Vue Component -->
-            <node-search :id="-1"></node-search>
+            <node-search :id="-1" :index="-1"></node-search>
         </div>
         <div id="checkbox-search-btn sv-container">
             <div class="sv-item">
@@ -85,7 +85,7 @@
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="/static/js/socket.js"></script>
-<script src="/static/js/nodeSearch.js"></script>
+<script src="/static/js/NodeSearch.js"></script>
 <script src="/static/js/search.js"></script>
 <script src="/static/js/map.js"></script>
 </body>
