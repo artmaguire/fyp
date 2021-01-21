@@ -8,6 +8,8 @@ html, body {
 }
 
 #search-view {
+    transition: opacity 1s;
+    opacity: 0.5;
     width: 350px;
     position: absolute;
     top: 20px;
@@ -15,6 +17,11 @@ html, body {
     z-index: 999999;
     background: white;
     overflow: hidden;
+}
+
+#search-view:hover {
+    opacity: 1;
+    transition: opacity 0.3s;
 }
 
 .search-view-header {

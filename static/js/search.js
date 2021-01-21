@@ -9,6 +9,9 @@ const search = new Vue({
         },
         goButtonClick: function () {
             displayRoute(this.additionalNodes.map(x => x.id));
+        },
+        handleBlur() {
+            console.log('blur')
         }
     }
 });
