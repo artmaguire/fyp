@@ -6,7 +6,7 @@ const mapBoxURL = `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?acces
 const mapBoxAttribute = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
 
 // Different MapBox maps including: Streets-V11, Dark-V10, Light-V10, Satellite-V11
-const streets = L.tileLayer(mapBoxURL, {
+let streets = L.tileLayer(mapBoxURL, {
         id: 'mapbox/streets-v11',
         maxZoom: 18,
         tileSize: 512,
@@ -39,12 +39,19 @@ const streets = L.tileLayer(mapBoxURL, {
         accessToken: mapboxAccessToken
     });
 
-const baseMaps = {
+const maps = new Map();
+maps.set("Streets", streets)
+maps.set("Dark", dark)
+maps.set("Light", light)
+maps.set("Satellite", satelliteStreets)
+
+let baseMaps = {
     "Streets": streets,
     "Dark": dark,
     "Light": light,
     "Satellite": satelliteStreets,
 };
+
 // Default view is in Ireland
 const irelandView = {
     "x": 53.417717,
@@ -52,7 +59,14 @@ const irelandView = {
     "zoom": 7
 }
 const map = L.map('mapid').setView([irelandView.x, irelandView.y], irelandView.zoom);
-streets.addTo(map);
+
+const defaultMap = document.cookie.match(/^(.*;)?\s*baseMap\s*=\s*[^;]+(.*)?$/)
+if (defaultMap === null) {
+    streets.addTo(map);
+} else {
+    const baseMap = getPreviousMap()
+    baseMaps[baseMap].addTo(map);
+}
 
 // Add all map layers
 L.control.layers(baseMaps).addTo(map);
@@ -62,6 +76,13 @@ map.zoomControl.remove();
 L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
+
+function getPreviousMap() {
+    return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('baseMap'))
+        .split('=')[1];
+}
 
 const markerMap = new Map();
 
@@ -131,3 +152,19 @@ function displayRoute(additionalNodes) {
         waypoints: waypoints
     }).addTo(map);
 }
+
+// Saves current map layer to cookie when the user leaves the page
+window.onbeforeunload = function () {
+    let mapId = 0
+    for (let m in map._layers) {
+        mapId = m
+    }
+
+    let cookieString = "baseMap=";
+    for (let m of maps) {
+        if (m[1].options['id'] === map._layers[mapId].options['id']) {
+            document.cookie = cookieString += m[0];
+        }
+    }
+};
+
