@@ -1,4 +1,3 @@
-from flask import Flask, jsonify, request
 import logging
 
 from flask import Flask, jsonify, request
@@ -34,9 +33,6 @@ def search():
     open_connection()
     name = request.args.get('name')
     results = get_location_name(name)
-    print(name)
-    print(results)
-
     return jsonify(results)
 
 

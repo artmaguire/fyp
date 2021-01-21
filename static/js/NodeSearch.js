@@ -40,7 +40,11 @@ let nodeSearch = Vue.component('node-search', {
                     </div>
                     <div class="sv-input sv-item">
                         <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                               style="font-size: 0.83rem;" autocomplete="off" type="text" placeholder="Enter location">
+                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-if="this.index === 0" placeholder="Start">
+                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
+                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-else-if="this.index === -1" placeholder="End">
+                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
+                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-else placeholder="Via">
                     </div>
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
