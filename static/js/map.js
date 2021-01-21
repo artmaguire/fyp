@@ -1,15 +1,63 @@
 // Leaflet JS OpenStreetMapMapbox Map
-// Default view is in Ireland
+
+// Mapbox tokens for different maps
 const mapboxAccessToken = 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'
-const map = L.map('mapid').setView([53.417717, -7.945862], 7);
-L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapboxAccessToken}`, {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: mapboxAccessToken
-}).addTo(map);
+const mapBoxURL = `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapboxAccessToken}`
+const mapBoxAttribute = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+
+// Different MapBox maps including: Streets-V11, Dark-V10, Light-V10, Satellite-V11
+const streets = L.tileLayer(mapBoxURL, {
+        id: 'mapbox/streets-v11',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: mapBoxAttribute,
+        accessToken: mapboxAccessToken
+    }),
+    dark = L.tileLayer(mapBoxURL, {
+        id: 'mapbox/dark-v10',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: mapBoxAttribute,
+        accessToken: mapboxAccessToken
+    }),
+    light = L.tileLayer(mapBoxURL, {
+        id: 'mapbox/light-v10',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: mapBoxAttribute,
+        accessToken: mapboxAccessToken
+    }),
+    satelliteStreets = L.tileLayer(mapBoxURL, {
+        id: 'mapbox/satellite-streets-v11',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: mapBoxAttribute,
+        accessToken: mapboxAccessToken
+    });
+
+const baseMaps = {
+    "Streets": streets,
+    "Dark": dark,
+    "Light": light,
+    "Satellite": satelliteStreets,
+};
+// Default view is in Ireland
+const irelandView = {
+    "x": 53.417717,
+    "y": -7.945862,
+    "zoom": 7
+}
+const map = L.map('mapid').setView([irelandView.x, irelandView.y], irelandView.zoom);
+streets.addTo(map);
+
+// Add all map layers
+L.control.layers(baseMaps).addTo(map);
+
+// Place zoom controls at bottom right of the screen
 map.zoomControl.remove();
 L.control.zoom({
     position: 'bottomright'
