@@ -18,19 +18,25 @@
         }
     </style>
     <link rel="stylesheet" href="/static/css/search.css">
+    <link rel="stylesheet" href="/static/css/bulma-pageloader.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
-<div id="mapid"></div>
-<div id="search-view" @blur="handleBlur" class="box">
-    <div class="search-view-header">
-        <p>Direction finding Using OSM</p>
-    </div>
-    <div class="search-view-section">
-        <div class="card">
-            <div id="transport-icons">
+<div id="splash-screen" v-bind:class="{ 'is-active': isActive }" class="pageloader is-left-to-right"><span
+        class="title has-text-weight-semibold">Direction Finding Using OpenStreetMap</span>
+</div>
+<div id="main-component" class="is-invisible">
+    <div id="mapid"></div>
+    <div id="search-view" @blur="handleBlur" class="box">
+        <div class="search-view-header">
+            <p>Direction Finding Using OSM</p>
+        </div>
+        <div class="search-view-section">
+            <div class="card">
+                <div id="transport-icons">
         <span class="icon-text">
-              <span class="sv-icon content">
-                <i class="fa fa-car" style="color: darkgreen;"> </i>
+              <span class="sv-icon">
+                <i class="fa fa-car" style="color: crimson;"> </i>
               </span>
               <span class="sv-icon">
                 <i class="fa fa-bicycle"></i>
@@ -45,37 +51,39 @@
                 <i class="fa fa-truck"></i>
               </span>
             </span>
+                </div>
             </div>
-        </div>
-        <div class="sv-inputs">
-            <!-- Templating for search nodes, done by Vue Component -->
-            <node-search :id="0" :index="0"></node-search>
-            <template v-for="(child, index) in additionalNodes">
+            <div class="sv-inputs">
+                <!-- Templating for search nodes, done by Vue Component -->
+                <node-search :id="0" :index="0"></node-search>
+                <template v-for="(child, index) in additionalNodes">
+                    <hr style="margin: 2px;">
+                    <component :is="child.component" :id="child.id" :index="index+1"></component>
+                </template>
                 <hr style="margin: 2px;">
-                <component :is="child.component" :id="child.id" :index="index+1"></component>
-            </template>
-            <hr style="margin: 2px;">
 
-            <!-- Templating for search nodes, done by Vue Component -->
-            <node-search :id="-1" :index="-1"></node-search>
-        </div>
-        <div id="checkbox-search-btn sv-container">
-            <div class="sv-item">
-                <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
-                    <i class="fa fa-plus"></i>
-                </button>
-                <div id="search-btn">
-                    <button class="button is-success" @click="goButtonClick">
-                        <span>Go</span>
-                        <div class="icon is-small">
-                            <i class="fa fa-check"></i>
-                        </div>
+                <!-- Templating for search nodes, done by Vue Component -->
+                <node-search :id="-1" :index="-1"></node-search>
+            </div>
+            <div id="checkbox-search-btn sv-container">
+                <div class="sv-item">
+                    <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
+                        <i class="fa fa-plus"></i>
                     </button>
+                    <div id="search-btn">
+                        <button id="go-button" class="button" @click="goButtonClick">
+                            <span>Go</span>
+                            <div class="icon is-small">
+                                <i class="fa fa-check"></i>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="module" src="/static/js/SplashScreen.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
