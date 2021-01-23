@@ -30,10 +30,9 @@ html, body {
     color: white;
     font-weight: bold;
     font-size: large;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     padding: 4px 8px;
     text-align: center;
-    font-family: 'Lato', sans-serif;
 }
 
 #transport-icons {
