@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>DFOSM</title>
     <script src="https://use.fontawesome.com/291859f4e0.js"></script>
+    <link rel="icon" type="image/png"
+          href="https://lh3.googleusercontent.com/0-XG58_gxagvdtHoZRTpNRdS4Bfm1i06vo2Yz45YxO_nlqcbrmzt9SkAJjUVGEc2yjG4fUKILkrkxCoL2ZZ-hYbjRfvxTbpvVRKqtqd8r_tJgeJ_5j-D73Ev2zORzJrzCmeJ02zf1VmQ_mvYAoxArpbFJOtc2VzvKqYF60q51Gvl2sycBlDOTTCYx8xdH8koJXUhYO31pZSwNXgowH7IwqH7UXaFsOmg3vc1snQOcfnrOgiPJTIl6dPZfVKPOIrKUeLrdt-TNOhvpXqHkihM7q_sco_riP11u7SvMGTzgjf5Yqls-s9jngFdX6EsL7tT0gOdrHJfgj4rnM2bu-vK2Vzf2BEuz9-LGCcOZg6IXcTY8t1eHz86AdkXV7sLcJ0hAGYvcCAFAqVWaX5Zb2uMUozB1Xb_qbo689Hr6DsWAHE_8VaK6GqInd8M5XOrMuT6e0JpS8xYQwS6x0HpSbzpfxZ2L06XSRmhoczSDMpdh-t0Kp7mVbLpyI7N9q44deM09bntQdQBMbjsQql7kudrDRPOanluPbJNnfpQdAQCUAGmTjZSgjRnVnencCMSyFXu9HtcqfeyFd-TTfWEO6Inky_Klh-vVeZ_CejusneDRaJC_Su_GImfbitRwmR-TBH_f2Uih-r4wd7Jyx_i4R4-e6ovGKMt8aNSFG64A4cyDIozScXztjfk2tq13JSWyvs=s32-no?authuser=0"/>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
@@ -27,6 +30,21 @@
 </div>
 <div id="main-component" class="is-invisible">
     <div id="mapid"></div>
+
+    <div id="loading-background" class="is-invisible">
+        <div class="container-loading">
+            <div class="finding-route-card">
+                <!-- The loader will be here -->
+                <h2 class="finding-route-text">
+                    Finding Route...
+                </h2>
+                <div class="has-text-centered">
+                    <a class="button is-big">Gif</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="search-view" @blur="handleBlur" class="box">
         <div class="search-view-header">
             <p>Direction Finding Using OSM</p>

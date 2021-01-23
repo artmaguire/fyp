@@ -15,7 +15,7 @@ let nodeSearch = Vue.component('node-search', {
         },
         searchSelected: function (result) {
             this.nodeInput = result.name
-            addMarker(result.name, result.lat, result.lon, this.id)
+            addMarker(result.name, result.lat, result.lon, this.id, this.index)
         },
         closeSearchList: function () {
             setTimeout(() => {
