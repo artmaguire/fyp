@@ -223,8 +223,6 @@ function displayRoute(additionalNodes) {
         console.log('Not enough nodes')
         return;
     }
-    document.getElementById("loading-background").className = 'is-visible';
-
 
     let waypoints = []
     waypoints.push(getCoords(markerMap.get(nodes.START)))
@@ -236,7 +234,6 @@ function displayRoute(additionalNodes) {
 
     waypoints.push(getCoords(markerMap.get(nodes.END)))
 
-    document.getElementById("loading-background").className = 'is-invisible';
     L.Routing.control({
         router: L.Routing.mapbox(mapboxAccessToken),
         waypoints: waypoints,

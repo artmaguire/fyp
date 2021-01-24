@@ -1,13 +1,8 @@
 // Controls the Splash Screen when the website is entered
-const splash = new Vue({
-    el: '#splash-screen',
-    data: {
-        isActive: true
-    },
-    mounted() {
-        setTimeout(() => {
-            this.isActive = false;
-            document.getElementById("main-component").className = '';
-        }, 1000)
-    }
+let splashScreen = Vue.component('splash-screen', {
+    props: {active: Boolean},
+    template: `
+        <div id="splash-screen" v-bind:class="{ 'is-active': active }" class="pageloader is-left-to-right">
+            <span class="title has-text-weight-semibold">Direction Finding Using OpenStreetMap</span>
+        </div>`
 });

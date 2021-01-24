@@ -25,85 +25,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
-<div id="splash-screen" v-bind:class="{ 'is-active': isActive }" class="pageloader is-left-to-right">
-    <span class="title has-text-weight-semibold">Direction Finding Using OpenStreetMap</span>
+<div id="main-component">
+
 </div>
-<div id="main-component" class="is-invisible">
-    <div id="mapid"></div>
-
-    <div id="loading-background" class="is-invisible">
-        <div class="container-loading">
-            <div class="finding-route-card">
-                <!-- The loader will be here -->
-                <h2 class="finding-route-text">
-                    Finding Route...
-                </h2>
-
-                <div class="gifs">
-                    <img id="driving-gif"
-                         src="https://lh3.googleusercontent.com/IWqPTTNtstuNYWLDP1k8mNokkqR5PkbZLVl7lz1yN_BYgO9q86_hZLU1Ra5GuhTgq8Uy7KkXGiz1kvHS2gRPIokpj6GshgX7dBjKZlc2GTLNGVHQHqc1A2KjNnY0AidRWglrPJ9jyoSG8AJwoiP4Gn6AG-7vKkCxi2AoplaZrlwKi2P6B9EcZQ2lXpcxgA5kjKmmsTxSom3d-NlKmRQ-JngYJ650s9LFD2w73lwCcQMo4uktsq4Fj02vLt1Oq0JSkSImm6Qyo0M5MLo5Oo-QHn5HkbtFold59wlCJaOpJCV4ZK7QezE0GjgbwbmPif5fNDs39AKtMbDR1VtReh1uE5adCts--0uGyla5ZQaq0_EbT3ionG7nMYtLLF-PVBCQSsbNJJB2hYfHobvUAljJHWqxlUJbCocJDpVUflxZ0KX7eh6dm3pdlDZQMLrNFFO2t-jptPickuv2yF-Y5vky5jVqRUfZZvfdR_4WCmsLbB8mCVWiBIvPaXIMfNKNkCVaonK08MXreTkQy7GnsmiasaJ66HWV68FAcIbVJnz1WGPhwVftjd2fDg852b1gO1zKYHuZklR_7ELV7dKegSVjJsck4n8Zjy597rsJ2zhkgMilLysI_cQv370wqnNh6eqTwyeHUYyuSiCPhGesd9m4TotpxVMHA7iOHNjGSk5o_ewWH2eQfx1H3ZoerQTYors=w1350-h650-no?authuser=0">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="search-view" @blur="handleBlur" class="box">
-        <div class="search-view-header">
-            <p>Direction Finding Using OSM</p>
-        </div>
-        <div class="search-view-section">
-            <div class="card">
-                <div id="transport-icons">
-        <span class="icon-text">
-              <span class="sv-icon">
-                <i class="fa fa-car" style="color: crimson;"> </i>
-              </span>
-              <span class="sv-icon">
-                <i class="fa fa-bicycle"></i>
-              </span>
-              <span class="sv-icon">
-                <i class="fa fa-blind"></i>
-              </span>
-              <span class="sv-icon">
-                <i class="fa fa-bus"></i>
-              </span>
-              <span class="sv-icon">
-                <i class="fa fa-truck"></i>
-              </span>
-            </span>
-                </div>
-            </div>
-            <div class="sv-inputs">
-                <!-- Templating for search nodes, done by Vue Component -->
-                <node-search :id="0" :index="0"></node-search>
-                <template v-for="(child, index) in additionalNodes">
-                    <hr style="margin: 2px;">
-                    <component :is="child.component" :id="child.id" :index="index+1"></component>
-                </template>
-                <hr style="margin: 2px;">
-
-                <!-- Templating for search nodes, done by Vue Component -->
-                <node-search :id="-1" :index="-1"></node-search>
-            </div>
-            <div id="checkbox-search-btn sv-container">
-                <div class="sv-item">
-                    <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <div id="search-btn">
-                        <button id="go-button" class="button" @click="goButtonClick">
-                            <span>Go</span>
-                            <div class="icon is-small">
-                                <i class="fa fa-check"></i>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script type="module" src="/static/js/SplashScreen.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
@@ -114,7 +38,10 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="/static/js/socket.js"></script>
 <script src="/static/js/NodeSearch.js"></script>
-<script src="/static/js/search.js"></script>
+<script src="/static/js/Search.js"></script>
+<script src="/static/js/LoadingScreen.js"></script>
+<script src="/static/js/SplashScreen.js"></script>
+<script src="/static/js/MainComponent.js"></script>
 <script src="/static/js/map.js"></script>
 </body>
 </html>
