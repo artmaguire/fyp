@@ -12,7 +12,7 @@ let loadingScreen = Vue.component('loading-screen', {
                     Finding Route...
                 </h2>
 
-                <div class="gifs">
+                <div v-bind:class="[ type === 'walking' ? 'walking-gif' : 'gifs' ]" class="">
                     <img id="driving-gif"
                          v-bind:src="'/static/images/gifs/' + type + '.gif'">
                 </div>

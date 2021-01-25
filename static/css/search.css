@@ -165,15 +165,15 @@ html, body {
 }
 
 .finding-route-card {
-    width: 300px;
-    padding: 25px;
+    width: 350px;
+    padding: 20px;
     background-color: rgba(255, 255, 255, 1);
     position: absolute;
     z-index: 5005;
     border-radius: 6px;
     top: 50%;
     left: 50%;
-    margin: -57px 0 0 -152px; /* apply negative top and left margins to truly center the element */
+    margin: -67px 0 0 -172px; /* apply negative top and left margins to truly center the element */
 }
 
 .finding-route-text {
@@ -183,13 +183,21 @@ html, body {
 }
 
 .gifs {
+    display: block;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
     width: 300px;
     height: 200px;
 }
 
 .walking-gif {
-    width: 200px;
-    height: 300px;
+    margin-top: 25px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    height: 250px;
 }
 
 .location-button {
