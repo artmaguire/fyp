@@ -39,7 +39,7 @@ html, body {
     margin: 8px;
     display: flex;
     justify-content: center;
-    letter-spacing: 12px;
+    letter-spacing: 24px;
 }
 
 .sv-icon {

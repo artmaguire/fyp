@@ -1,14 +1,12 @@
 const main = new Vue({
     el: '#main-component',
     data: {
-        additionalNodes: [],
         isSplashLoading: true,
         isLoading: false,
         searchType: 'driving'
     },
     methods: {
         startLoading(type) {
-            console.log(type);
             this.searchType = type;
             this.isLoading = true;
             setTimeout(() => {

@@ -2,7 +2,13 @@ let search = Vue.component('search', {
     data: function () {
         return {
             additionalNodes: [],
-            activeType: 'driving'
+            activeType: 'driving',
+            searchTypes: [
+                {type: 'driving', icon: 'fa-car'},
+                {type: 'cycling', icon: 'fa-bicycle'},
+                {type: 'walking', icon: 'fa-blind'},
+                {type: 'scenic', icon: 'fa-bus'},
+                {type: 'scenic', icon: 'fa-truck'}]
         }
     },
     methods: {
@@ -26,32 +32,20 @@ let search = Vue.component('search', {
             <div class="card">
                 <div id="transport-icons">
                     <ul class="icon-text">
-                      <li @click="setActiveType('driving')" class="sv-icon" v-bind:class="{ 'sv-icon-active': activeType === 'driving' }">
-                        <i class="fa fa-car"> </i>
-                      </li>
-                      <li @click="setActiveType('cycling')" class="sv-icon" v-bind:class="{ 'sv-icon-active': activeType === 'cycling' }">
-                        <i class="fa fa-bicycle"></i>
-                      </li>
-                      <li @click="setActiveType('walking')" class="sv-icon" v-bind:class="{ 'sv-icon-active': activeType === 'walking' }">
-                        <i class="fa fa-blind"></i>
+                      <li v-for="searchType in searchTypes" @click="setActiveType(searchType.type)" class="sv-icon"
+                        v-bind:class="{ 'sv-icon-active': activeType === searchType.type }">
+                        <i class="fa" :class="searchType.icon"> </i>
                       </li>
                       <!-- TODO: Add more gifs for bus and truck? -->
-                      <li @click="setActiveType('scenic')" class="sv-icon" v-bind:class="{ 'sv-icon-active': activeType === 'scenic' }">
-                        <i class="fa fa-bus"></i>
-                      </li>
-                      <li @click="setActiveType('scenic')" class="sv-icon" v-bind:class="{ 'sv-icon-active': activeType === 'scenic' }">
-                        <i class="fa fa-truck"></i>
-                      </li>
                     </ul>
                 </div>
             </div>
             <div class="sv-inputs">
                 <!-- Templating for search nodes, done by Vue Component -->
                 <node-search :id="0" :index="0"></node-search>
-                <template v-for="(child, index) in additionalNodes">
+                <node-search v-for="(child, index) in additionalNodes" :id="child.id" :index="index+1" :key="child.id">
                     <hr style="margin: 2px;">
-                    <component :is="child.component" :id="child.id" :index="index+1"></component>
-                </template>
+                </node-search>
                 <hr style="margin: 2px;">
 
                 <!-- Templating for search nodes, done by Vue Component -->

@@ -32,19 +32,35 @@ let nodeSearch = Vue.component('node-search', {
             this.searchResults = data.geonames;
         }
     },
+    computed: {
+        label: function () {
+            switch (this.index) {
+                case 0:
+                    return 'S'
+                case -1:
+                    return 'E'
+                default:
+                    return this.index
+            }
+        },
+        placeholder: function () {
+            switch (this.index) {
+                case 0:
+                    return 'Start'
+                case -1:
+                    return 'End'
+                default:
+                    return 'Via'
+            }
+        }
+    },
     template: `<div class="sv-container">
                     <div class="sv-label sv-item">
-                        <strong class="start-end-strong" v-if="this.index === 0">S</strong>
-                        <strong class="start-end-strong" v-else-if="this.index === -1">E</strong>
-                        <strong class="start-end-strong" v-else>{{ index }}</strong>
+                        <strong class="start-end-strong">{{ label }}</strong>
                     </div>
                     <div class="sv-input sv-item">
                         <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-if="this.index === 0" placeholder="Start">
-                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-else-if="this.index === -1" placeholder="End">
-                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                               style="font-size: 0.83rem;" autocomplete="off" type="text" v-else placeholder="Via">
+                               style="font-size: 0.83rem;" autocomplete="off" type="text" :placeholder="placeholder">
                     </div>
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
@@ -74,5 +90,4 @@ function handleSearch(node, query) {
     }
 
     searchTimeout = setTimeout(delaySearch, 50, data);
-    console.log(query);
 }
