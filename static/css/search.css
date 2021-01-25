@@ -192,6 +192,13 @@ html, body {
     height: 300px;
 }
 
+.location-button {
+    padding: 100px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
 * {
     font-family: 'Lato', sans-serif;
 }

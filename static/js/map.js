@@ -136,6 +136,35 @@ L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
 
+// L.control.locate({setView: true, watch: true}).addTo(map);
+
+// Asks for user location
+let userLocation = []
+locateUser();
+
+L.easyButton('<i class="fa fa-location-arrow"></i>', function (btn, map) {
+    //TODO: Add user marker to the map
+    if (userLocation.length !== 0)
+        map.flyTo([userLocation[0], userLocation[1]], 14);
+    else
+        locateUser()
+
+}, {position: 'bottomright'}).addTo(map);
+
+// Route variable
+let routingControl = null
+
+function locateUser() {
+    map.locate({enableHighAccuracy: true}) /* This will return map so you can do chaining */
+        .on('locationfound', function (e) {
+            userLocation = [e.latitude, e.longitude]
+            //TODO: Add user marker to the map
+            map.setView([e.latitude, e.longitude], 14);
+        })
+        .on('locationerror', function (e) {
+        });
+}
+
 function getPreviousMap() {
     return document.cookie
         .split('; ')
@@ -194,6 +223,14 @@ function removeMarker(markerId) {
     map.removeLayer(marker)
 }
 
+function removeRoute() {
+    if (!routingControl)
+        return;
+
+    map.removeControl(routingControl);
+    routingControl = null;
+}
+
 function panToNode(lat, lon) {
     map.setView(L.latLng(lat, lon), 12, {
         "animate": true,
@@ -224,6 +261,9 @@ function displayRoute(additionalNodes) {
         return;
     }
 
+    // Clears any existing routes
+    removeRoute()
+
     let waypoints = []
     waypoints.push(getCoords(markerMap.get(nodes.START)))
 
@@ -234,7 +274,7 @@ function displayRoute(additionalNodes) {
 
     waypoints.push(getCoords(markerMap.get(nodes.END)))
 
-    L.Routing.control({
+    routingControl = L.Routing.control({
         router: L.Routing.mapbox(mapboxAccessToken),
         waypoints: waypoints,
         createMarker: function () {
