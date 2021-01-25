@@ -19,8 +19,11 @@ let search = Vue.component('search', {
             this.additionalNodes.push({id: Math.random(), component: nodeSearch});
         },
         goButtonClick: function () {
-            this.$emit('loading', this.activeType)
+            this.$emit('loading', this.activeType);
             displayRoute(this.additionalNodes.map(x => x.id));
+        },
+        deleteNode(id) {
+            this.additionalNodes = this.additionalNodes.filter(node => node.id !== id);
         }
     },
     template: `

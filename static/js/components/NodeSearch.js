@@ -11,16 +11,23 @@ let nodeSearch = Vue.component('node-search', {
     },
     methods: {
         searchChange: function () {
-            handleSearch(this.id, this.nodeInput)
+            handleSearch(this.id, this.nodeInput);
         },
         searchSelected: function (result) {
-            this.nodeInput = result.name
-            addMarker(result.name, result.lat, result.lon, this.id, this.index)
+            this.nodeInput = result.name;
+            addMarker(result.name, result.lat, result.lon, this.id, this.index);
         },
         closeSearchList: function () {
             setTimeout(() => {
-                this.isSearching = false
+                this.isSearching = false;
             }, 120);
+        },
+        deleteSearch: function () {
+            if (this.id > 0)
+                this.$parent.deleteNode(this.id);
+            else
+                this.nodeInput = '';
+            removeMarker(this.id);
         }
     },
     props: {id: Number, index: Number},
@@ -58,9 +65,13 @@ let nodeSearch = Vue.component('node-search', {
                     <div class="sv-label sv-item">
                         <strong class="start-end-strong">{{ label }}</strong>
                     </div>
-                    <div class="sv-input sv-item">
-                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true" @blur="closeSearchList" class="input is-rounded"\n
-                               style="font-size: 0.83rem;" autocomplete="off" type="text" :placeholder="placeholder">
+                    <div class="sv-input sv-item control has-icons-right">
+                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true"
+                        @blur="closeSearchList" class="input is-rounded" autocomplete="off"
+                        type="text" :placeholder="placeholder">
+                        <span class="icon is-small is-right">
+                          <a @click="deleteSearch" class="delete is-small"></a>
+                        </span>
                     </div>
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">

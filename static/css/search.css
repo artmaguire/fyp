@@ -85,6 +85,19 @@ html, body {
     width: 90%;
 }
 
+.sv-input > * {
+    font-size: 0.83rem;
+}
+
+.sv-input > span {
+    visibility: hidden;
+}
+
+.sv-input:hover > span {
+    visibility: visible;
+    cursor: pointer;
+}
+
 .add-node {
     padding: 4px;
     font-size: 1.4rem;
