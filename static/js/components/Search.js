@@ -6,7 +6,7 @@ let search = Vue.component('search', {
             searchTypes: [
                 {type: 'driving', icon: 'fa-car'},
                 {type: 'cycling', icon: 'fa-bicycle'},
-                {type: 'walking', icon: 'fa-blind'},
+                {type: 'walking', icon: 'fa-walking'},
                 {type: 'scenic', icon: 'fa-bus'},
                 {type: 'scenic', icon: 'fa-truck'}]
         }
@@ -49,7 +49,7 @@ let search = Vue.component('search', {
                     <ul class="icon-text">
                       <li v-for="searchType in searchTypes" @click="setActiveType(searchType.type)" v-bind:title="searchType.type" class="sv-icon"
                         v-bind:class="{ 'sv-icon-active': activeType === searchType.type }">
-                        <i class="fa" :class="searchType.icon"> </i>
+                        <i class="fas" :class="searchType.icon"> </i>
                       </li>
                       <!-- TODO: Add more gifs for bus and truck? -->
                     </ul>
