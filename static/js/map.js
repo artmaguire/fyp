@@ -136,19 +136,18 @@ L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
 
-// L.control.locate({setView: true, watch: true}).addTo(map);
-
 // Asks for user location
 let userLocation = []
 locateUser();
 
-L.easyButton('<i class="fa fa-location-arrow" title="Your location"></i>', function (btn, map) {
+
+// Button for users location
+L.easyButton('<i class="fa fa-map-marker" title="Your location"></i>', function (btn, map) {
     //TODO: Add custom user marker to the map
     if (userLocation.length !== 0) {
         map.flyTo([userLocation[0], userLocation[1]], 14);
     } else
         locateUser()
-
 }, {position: 'bottomright'}).addTo(map);
 
 // Route variable
