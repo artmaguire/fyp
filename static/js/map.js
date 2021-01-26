@@ -145,8 +145,6 @@ locateUser();
 L.easyButton('<i class="fa fa-location-arrow"></i>', function (btn, map) {
     //TODO: Add custom user marker to the map
     if (userLocation.length !== 0) {
-        L.marker([userLocation[0], userLocation[1]], {}).bindPopup(L.popup()
-            .setContent("You are here")).openPopup().addTo(map);
         map.flyTo([userLocation[0], userLocation[1]], 14);
     } else
         locateUser()
@@ -160,10 +158,7 @@ function locateUser() {
     map.locate({enableHighAccuracy: true}) /* This will return map so you can do chaining */
         .on('locationfound', function (e) {
             userLocation = [e.latitude, e.longitude]
-            //TODO: Add user marker to the map
-            L.marker([e.latitude, e.longitude], {}).bindPopup(L.popup()
-                .setContent("You are here")).openPopup().addTo(map);
-            map.setView([e.latitude, e.longitude], 14);
+            map.setView([e.latitude, e.longitude], 12);
         })
         .on('locationerror', function (e) {
         });
