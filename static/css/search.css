@@ -52,7 +52,7 @@ html, body {
 }
 
 .search-view-section {
-    padding: 8px;
+    padding: 8px 8px 0 8px;
     flex-wrap: wrap;
 }
 
@@ -102,7 +102,7 @@ html, body {
     padding: 4px;
     font-size: 1.4rem;
     height: 100%;
-    margin: 4px auto 4px auto;
+    margin: 4px auto 4px 8px;
 }
 
 #checkbox-search-btn {
