@@ -141,7 +141,7 @@ let userLocation = []
 locateUser();
 
 // Button for users location
-L.easyButton('<div title="Your location"><i class="fa fa-map-marker"</i></div>', function (btn, map) {
+L.easyButton('<div title="Your location"><i class="fas fa-map-marker-alt"</i></div>', function (btn, map) {
     if (userLocation.length !== 0) {
         map.flyTo([userLocation[0], userLocation[1]], 14);
     } else {
