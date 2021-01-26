@@ -140,14 +140,20 @@ L.control.zoom({
 let userLocation = []
 locateUser();
 
-
 // Button for users location
-L.easyButton('<i class="fa fa-map-marker" title="Your location"></i>', function (btn, map) {
-    //TODO: Add custom user marker to the map
+L.easyButton('<div title="Your location"><i class="fa fa-map-marker"</i></div>', function (btn, map) {
     if (userLocation.length !== 0) {
         map.flyTo([userLocation[0], userLocation[1]], 14);
-    } else
-        locateUser()
+    } else {
+        Swal.fire({
+            title: 'Location Denied',
+            text: 'To enable location services, Click allow location access in the browsers search bar.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then(r => {
+            locateUser()
+        });
+    }
 }, {position: 'bottomright'}).addTo(map);
 
 // Route variable
@@ -249,16 +255,6 @@ function getCoords(marker) {
 }
 
 function displayRoute(additionalNodes) {
-    // Check if marker map has atleast 2 node
-    // Call map method to display
-
-    if (markerMap.size < 2 || !markerMap.has(nodes.START) || !markerMap.has(nodes.END)) {
-        // TODO: Add modal or popup
-        alert('You haven\'t selected a start and end point!');
-        console.log('Not enough nodes')
-        return;
-    }
-
     // Clears any existing routes
     removeRoute()
 

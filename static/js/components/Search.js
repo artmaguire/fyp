@@ -19,6 +19,18 @@ let search = Vue.component('search', {
             this.additionalNodes.push({id: Math.random(), component: nodeSearch});
         },
         goButtonClick: function () {
+            // Check if marker map has atleast 2 node
+            // Call map method to display
+            if (markerMap.size < 2 || !markerMap.has(nodes.START) || !markerMap.has(nodes.END)) {
+                Swal.fire({
+                    title: 'Missing Locations',
+                    text: 'You haven\'t selected enough locations!',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                }).then(r => console.log('Not enough nodes'));
+                return;
+            }
+
             this.$emit('loading', this.activeType);
             displayRoute(this.additionalNodes.map(x => x.id));
         },
@@ -56,7 +68,7 @@ let search = Vue.component('search', {
             </div>
             <div id="checkbox-search-btn sv-container">
                 <div class="sv-item">
-                    <button class="button add-node" title="Add Location" @click="addNode" :disabled="additionalNodes.length >= 5">
+                    <button class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
                         <i class="fa fa-plus"></i>
                     </button>
                     <div id="search-btn">
