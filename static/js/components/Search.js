@@ -35,7 +35,7 @@ let search = Vue.component('search', {
             <div class="card">
                 <div id="transport-icons">
                     <ul class="icon-text">
-                      <li v-for="searchType in searchTypes" @click="setActiveType(searchType.type)" class="sv-icon"
+                      <li v-for="searchType in searchTypes" @click="setActiveType(searchType.type)" v-bind:title="searchType.type" class="sv-icon"
                         v-bind:class="{ 'sv-icon-active': activeType === searchType.type }">
                         <i class="fa" :class="searchType.icon"> </i>
                       </li>
@@ -56,11 +56,11 @@ let search = Vue.component('search', {
             </div>
             <div id="checkbox-search-btn sv-container">
                 <div class="sv-item">
-                    <button class="button add-node" @click="addNode" :disabled="additionalNodes.length >= 5">
+                    <button class="button add-node" title="Add Location" @click="addNode" :disabled="additionalNodes.length >= 5">
                         <i class="fa fa-plus"></i>
                     </button>
                     <div id="search-btn">
-                        <button id="go-button" class="button is-rounded" @click="goButtonClick">
+                        <button id="go-button" title="Find route" class="button is-rounded" @click="goButtonClick">
                             <span>Go</span>
                             <div class="icon is-small">
                                 <i class="fa fa-check"></i>

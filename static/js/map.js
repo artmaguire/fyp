@@ -142,7 +142,7 @@ L.control.zoom({
 let userLocation = []
 locateUser();
 
-L.easyButton('<i class="fa fa-location-arrow"></i>', function (btn, map) {
+L.easyButton('<i class="fa fa-location-arrow" title="Your location"></i>', function (btn, map) {
     //TODO: Add custom user marker to the map
     if (userLocation.length !== 0) {
         map.flyTo([userLocation[0], userLocation[1]], 14);
