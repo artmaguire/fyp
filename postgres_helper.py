@@ -1,9 +1,12 @@
 import psycopg2
 
+from config import conf
+
 
 def open_connection():
     global conn, cur
-    conn = psycopg2.connect(dbname="postgis", user="postgis", password="postgis", host="192.168.0.30", port="5432")
+    conn = psycopg2.connect(dbname=conf.DBNAME, user=conf.DBUSER, password=conf.DBPASSWORD, host=conf.DBHOST,
+                            port=conf.DBPORT)
     cur = conn.cursor()
 
 

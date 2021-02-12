@@ -3,6 +3,7 @@ import logging
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
 
+from config import conf
 from postgres_helper import get_location_name, open_connection
 
 log = logging.getLogger('werkzeug')
@@ -10,6 +11,8 @@ log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+
+print(conf.HOST)
 
 open_connection()
 
@@ -39,5 +42,5 @@ def search():
 if __name__ == '__main__':
     app.debug = True
     app.run()
-    app.run(debug=True)
+    app.run(debug=conf.DEBUG, host=conf.HOST, port=conf.PORT)
     socketio.run(app)
