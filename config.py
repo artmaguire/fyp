@@ -12,5 +12,8 @@ class Config(object):
     DBHOST = config('DBHOST')
     DBPORT = config('DBPORT')
 
+    EDGES_TABLE = config('EDGES_TABLE')
+    VERTICES_TABLE = config('VERTICES_TABLE')
+
 
 conf = Config()

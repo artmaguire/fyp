@@ -1,5 +1,6 @@
 import logging
 
+from dfosm import DFOSM
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
 
@@ -14,7 +15,10 @@ socketio = SocketIO(app)
 
 print(conf.HOST)
 
-open_connection()
+# open_connection()
+
+dfosm = DFOSM(conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPORT, conf.EDGES_TABLE,
+              conf.VERTICES_TABLE)
 
 
 @socketio.on('geoname_search')
@@ -37,6 +41,19 @@ def search():
     name = request.args.get('name')
     results = get_location_name(name)
     return jsonify(results)
+
+
+@app.route('/route', methods=['GET'])
+def route():
+    source = request.args.get('source')
+    target = request.args.get('target')
+
+    print('Source: ', source, '\tTarget: ', target)
+
+    nodes = dfosm.a_star(int(source), int(target))
+    print(nodes)
+
+    return jsonify(nodes)
 
 
 if __name__ == '__main__':
