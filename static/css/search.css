@@ -8,7 +8,7 @@ html, body {
 }
 
 #search-view {
-    transition: opacity 1s;
+    transition: opacity 2.5s;
     opacity: 0.5;
     width: 350px;
     position: absolute;
@@ -206,6 +206,21 @@ html, body {
     position: absolute;
     right: 0;
     bottom: 0;
+}
+
+.search-menu-item {
+    cursor: pointer;
+    padding: 8px;
+    width: 100%;
+}
+
+.search-menu-item:hover {
+    background-color: #ececec;
+}
+
+.search-menu-item-addr {
+    color: #666666;
+    font-size: small;
 }
 
 * {

@@ -80,7 +80,11 @@ let nodeSearch = Vue.component('node-search', {
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
                             <ul class="menu-list">
-                                <li v-for="result in searchResults" @click="searchSelected(result)"><a>{{ result.display_place }}</a></li>
+                                <li v-for="result in searchResults" @click="searchSelected(result)" class="search-menu-item">
+                                    <span class="">{{ result.display_place }}</span>
+                                    <br>
+                                    <span class="search-menu-item-addr">{{ result.display_address }}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -92,6 +96,7 @@ let nodeSearch = Vue.component('node-search', {
 let searchTimeout
 
 function delaySearch(data) {
+    data.bounds = getBoundsLngLat();
     socket.emit('geoname_search', data);
 }
 

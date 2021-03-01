@@ -27,13 +27,14 @@ def handle_geoname(data):
     query = "https://eu1.locationiq.com/v1/autocomplete.php"
 
     params = {
-        'q':       data.get('query'),
-        'key':     conf.LOCATIONIQ_API_KEY,
-        'format':  'json',
-        'limit':   5,
-        'viewbox': '-10.788574,55.40407,-5.262451,51.303145',
-        'bounded': 1,
-        'dedupe':  1
+        'q':            data.get('query'),
+        'key':          conf.LOCATIONIQ_API_KEY,
+        'format':       'json',
+        'limit':        5,
+        'viewbox':      data.get('bounds'),
+        'bounded':      0,
+        'countrycodes': 'ie',
+        'dedupe':       1
     }
 
     res = requests.get(query, params)
