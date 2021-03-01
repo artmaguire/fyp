@@ -15,6 +15,7 @@ let nodeSearch = Vue.component('node-search', {
         },
         searchSelected: function (result) {
             this.nodeInput = result.display_place;
+            removeGeoJSON()
             addMarker(result.display_place, result.lat, result.lon, this.id, this.index);
         },
         closeSearchList: function () {

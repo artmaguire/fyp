@@ -157,7 +157,10 @@ L.easyButton('<div title="Your location"><i class="fas fa-map-marker-alt"</i></d
 }, {position: 'bottomright'}).addTo(map);
 
 // Route variable
-let routingControl = null
+let routingControl = null;
+
+// GeoJSON Layer
+let geoJSONLayer = null;
 
 function locateUser() {
     map.locate({enableHighAccuracy: true}) /* This will return map so you can do chaining */
@@ -294,4 +297,17 @@ window.onbeforeunload = function () {
 
 function getBoundsLngLat() {
     return map.getBounds().toBBoxString()
+}
+
+function addGeoJSON(routeGeoJSON) {
+    geoJSONLayer = L.geoJSON(routeGeoJSON, {
+        style: function (feature) {
+            return {color: "crimson"};
+        }
+    }).addTo(map);
+}
+
+function removeGeoJSON() {
+    if (!geoJSONLayer) return;
+    map.removeLayer(geoJSONLayer);
 }

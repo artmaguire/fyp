@@ -32,7 +32,17 @@ let search = Vue.component('search', {
             }
 
             this.$emit('loading', this.activeType);
-            displayRoute(this.additionalNodes.map(x => x.id));
+
+            axios.get('/route', {
+                params: {
+                    source: '1',
+                    target: '2'
+                }
+            }).then(response => {
+                this.$emit('finished_loading', this.activeType);
+                addGeoJSON(JSON.parse(response.data));
+            })
+            // displayRoute(this.additionalNodes.map(x => x.id));
         },
         deleteNode(id) {
             this.additionalNodes = this.additionalNodes.filter(node => node.id !== id);
