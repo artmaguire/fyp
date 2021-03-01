@@ -14,8 +14,8 @@ let nodeSearch = Vue.component('node-search', {
             handleSearch(this.id, this.nodeInput);
         },
         searchSelected: function (result) {
-            this.nodeInput = result.name;
-            addMarker(result.name, result.lat, result.lon, this.id, this.index);
+            this.nodeInput = result.display_place;
+            addMarker(result.display_place, result.lat, result.lon, this.id, this.index);
         },
         closeSearchList: function () {
             setTimeout(() => {
@@ -39,6 +39,7 @@ let nodeSearch = Vue.component('node-search', {
             if (data.node !== this.id)
                 return;
 
+            console.log(data);
             this.searchResults = data.geonames;
         }
     },
@@ -79,7 +80,7 @@ let nodeSearch = Vue.component('node-search', {
                     <div class="sv-suggestions-box-wrapper">
                         <div v-if="isSearching" class="card sv-suggestions-box">
                             <ul class="menu-list">
-                                <li v-for="result in searchResults" @click="searchSelected(result)"><a>{{ result.name }}</a></li>
+                                <li v-for="result in searchResults" @click="searchSelected(result)"><a>{{ result.display_place }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -103,5 +104,5 @@ function handleSearch(node, query) {
         query: query
     }
 
-    searchTimeout = setTimeout(delaySearch, 50, data);
+    searchTimeout = setTimeout(delaySearch, 250, data);
 }

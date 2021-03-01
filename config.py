@@ -15,5 +15,7 @@ class Config(object):
     EDGES_TABLE = config('EDGES_TABLE')
     VERTICES_TABLE = config('VERTICES_TABLE')
 
+    LOCATIONIQ_API_KEY = config('LOCATIONIQ_API_KEY')
+
 
 conf = Config()

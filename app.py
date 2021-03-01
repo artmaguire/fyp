@@ -1,5 +1,6 @@
 import logging
 
+import requests
 from dfosm import DFOSM
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
@@ -23,10 +24,20 @@ dfosm = DFOSM(conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPOR
 
 @socketio.on('geoname_search')
 def handle_geoname(data):
-    print(data)
-    geonames = get_location_name(data.get('query'))
-    print(geonames)
-    result = {"node": data.get("node"), "geonames": geonames}
+    query = "https://eu1.locationiq.com/v1/autocomplete.php"
+
+    params = {
+        'q':       data.get('query'),
+        'key':     conf.LOCATIONIQ_API_KEY,
+        'format':  'json',
+        'limit':   5,
+        'viewbox': '-10.788574,55.40407,-5.262451,51.303145',
+        'bounded': 1,
+        'dedupe':  1
+    }
+
+    res = requests.get(query, params)
+    result = {"node": data.get("node"), "geonames": res.json()}
     emit('geoname_result', result)
 
 
