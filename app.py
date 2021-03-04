@@ -57,12 +57,12 @@ def search():
 
 @app.route('/route', methods=['GET'])
 def route():
-    source = request.args.get('source')
-    target = request.args.get('target')
+    print(request.args.get('source'))
+    print(request.args.get('target'))
+    source_lat, source_lng = request.args.get('source').split(',')
+    target_lat, target_lng = request.args.get('target').split(',')
 
-    print('Source: ', source, '\tTarget: ', target)
-
-    nodes = dfosm.a_star(int(source), int(target))
+    nodes = dfosm.a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng))
     print(nodes)
 
     return jsonify(nodes)

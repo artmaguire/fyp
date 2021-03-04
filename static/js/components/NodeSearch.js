@@ -5,6 +5,7 @@ let nodeSearch = Vue.component('node-search', {
     data: function () {
         return {
             nodeInput: '',
+            nodeData: {},
             isSearching: false,
             searchResults: []
         }
@@ -15,6 +16,10 @@ let nodeSearch = Vue.component('node-search', {
         },
         searchSelected: function (result) {
             this.nodeInput = result.display_place;
+            this.nodeData = result;
+            this.nodeData.id = this.id;
+            this.$store.commit('SET_NODE', this.nodeData);
+
             removeGeoJSON()
             addMarker(result.display_place, result.lat, result.lon, this.id, this.index);
         },

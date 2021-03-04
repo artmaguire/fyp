@@ -31,15 +31,17 @@ let search = Vue.component('search', {
                 return;
             }
 
-            this.$emit('loading', this.activeType);
+            this.$store.commit('SET_ROUTE_LOADING', true)
+
+            let nodeMap = this.$store.getters.getNodes;
 
             axios.get('/route', {
                 params: {
-                    source: '1',
-                    target: '2'
+                    source: nodeMap.get(0).lat + ',' + nodeMap.get(0).lon,
+                    target: nodeMap.get(-1).lat + ',' + nodeMap.get(-1).lon
                 }
             }).then(response => {
-                this.$emit('finished_loading', this.activeType);
+                this.$store.commit('SET_ROUTE_LOADING', false)
                 addGeoJSON(JSON.parse(response.data));
             })
             // displayRoute(this.additionalNodes.map(x => x.id));
