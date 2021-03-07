@@ -42,8 +42,11 @@ let search = Vue.component('search', {
                 }
             }).then(response => {
                 this.$store.commit('SET_ROUTE_LOADING', false)
-                addGeoJSON(JSON.parse(response.data));
-            })
+                addGeoJSON(JSON.parse(response.data.route), 0, 0, "crimson", 3);
+
+                for (let branch of response.data.branch)
+                    addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
+            });
             // displayRoute(this.additionalNodes.map(x => x.id));
         },
         deleteNode(id) {
