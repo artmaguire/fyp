@@ -310,13 +310,14 @@ colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
     '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
     '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-function addGeoJSON(routeGeoJSON, cost, distance, color, weight = 1) {
+function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 3) {
     if (!color)
         color = colors[Math.floor(Math.random() * colors.length)]
 
     geoJSONLayer = L.geoJSON(routeGeoJSON, {
         onEachFeature: (feature, layer) => {
-            layer.bindPopup(`Cost: ${Math.round(cost * 100) / 100}, Distance: ${Math.round(distance * 100) / 100}km`);
+            layer.bindPopup(`Cost: ${Math.round(cost * 100) / 100}, TCost: ${Math.round(totalCost * 100) / 100}, #
+            D: ${Math.round(distance * 100) / 100}km, DM: ${Math.round(distanceMinutes * 100) / 100}m`);
         },
         style: () => {
             return {color: color, weight: weight};
@@ -329,7 +330,19 @@ function removeGeoJSON() {
     map.removeLayer(geoJSONLayer);
 }
 
-// j =
+let history_list = [];
+let history_index = 0;
+
+function history_next() {
+    let nodes = history_list[history_index]
+
+    for (let node of nodes)
+        addGeoJSON(JSON.parse(node.geojson), cost = node.cost, totalCost = node.total_cost, distance = node.distance,
+            distanceMinutes = node.distance_minutes);
+    history_index++;
+}
+
+// j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
 //
 // for (let jj of j)
 //     addGeoJSON(jj);
