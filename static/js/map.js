@@ -299,6 +299,8 @@ function getBoundsLngLat() {
     return map.getBounds().toBBoxString()
 }
 
+let routeLayerGroup = L.layerGroup().addTo(map);
+
 colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
     '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
     '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
@@ -322,24 +324,38 @@ function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanc
         style: () => {
             return {color: color, weight: weight};
         }
-    }).addTo(map);
+    });
+    routeLayerGroup.addLayer(geoJSONLayer);
 }
 
 function removeGeoJSON() {
-    if (!geoJSONLayer) return;
-    map.removeLayer(geoJSONLayer);
+    routeLayerGroup.clearLayers()
+
+    routeHistory = [];
+    routeHistoryIndex = 0;
 }
 
-let history_list = [];
-let history_index = 0;
+let routeHistory = [];
+let routeHistoryIndex = 0;
 
-function history_next() {
-    let nodes = history_list[history_index]
+function setRouteHistory(history) {
+    routeHistory = history;
+    routeHistoryIndex = 0;
+}
 
-    for (let node of nodes)
-        addGeoJSON(JSON.parse(node.geojson), cost = node.cost, totalCost = node.total_cost, distance = node.distance,
-            distanceMinutes = node.distance_minutes);
-    history_index++;
+function routeHistoryNext(count = 1) {
+    for (let i = 0; i < count; i++) {
+        if (routeHistoryIndex >= routeHistory.length) {
+            console.log("FOUND TARGET!!!");
+            return;
+        }
+        let nodes = routeHistory[routeHistoryIndex]
+
+        for (let node of nodes)
+            addGeoJSON(JSON.parse(node.geojson), cost = node.cost, totalCost = node.total_cost, distance = node.distance,
+                distanceMinutes = node.distance_minutes);
+        routeHistoryIndex++;
+    }
 }
 
 // j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
