@@ -62,7 +62,7 @@ def route():
     source_lat, source_lng = request.args.get('source').split(',')
     target_lat, target_lng = request.args.get('target').split(',')
 
-    nodes = dfosm.a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng), visualisation=False,
+    nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng), visualisation=False,
                          history=True)
     print(nodes)
 
