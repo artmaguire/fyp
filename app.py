@@ -59,11 +59,26 @@ def search():
 def route():
     print(request.args.get('source'))
     print(request.args.get('target'))
+    print('Algorithm: ', request.args.get('algorithmType'))
+    print('Visualisation: ', request.args.get('visualisation'))
     source_lat, source_lng = request.args.get('source').split(',')
     target_lat, target_lng = request.args.get('target').split(',')
 
-    nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng), visualisation=False,
-                         history=True)
+    algorithmType = request.args.get('algorithmType')
+    visualisation = request.args.get('visualisation')
+
+    if algorithmType == 'A*':
+        nodes = dfosm.a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
+                                visualisation=visualisation,
+                                history=True)
+    elif algorithmType == 'Bi-direction A*':
+        nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
+                                visualisation=visualisation,
+                                history=True)
+    else:
+        nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
+                                visualisation=visualisation,
+                                history=True)
     print(nodes)
 
     return jsonify(nodes)

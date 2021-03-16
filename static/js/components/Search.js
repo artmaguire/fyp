@@ -8,7 +8,10 @@ let search = Vue.component('search', {
                 {type: 'cycling', icon: 'fa-bicycle'},
                 {type: 'walking', icon: 'fa-walking'},
                 {type: 'scenic', icon: 'fa-bus'},
-                {type: 'scenic', icon: 'fa-truck'}]
+                {type: 'scenic', icon: 'fa-truck'}],
+            algorithmType: 'A*',
+            visualisation: false,
+            expand: false
         }
     },
     methods: {
@@ -40,7 +43,9 @@ let search = Vue.component('search', {
             axios.get('/route', {
                 params: {
                     source: nodeMap.get(0).lat + ',' + nodeMap.get(0).lon,
-                    target: nodeMap.get(-1).lat + ',' + nodeMap.get(-1).lon
+                    target: nodeMap.get(-1).lat + ',' + nodeMap.get(-1).lon,
+                    algorithmType: this.algorithmType,
+                    visualisation: this.visualisation
                 }
             }).then(response => {
                 this.$store.commit('SET_ROUTE_LOADING', false)
@@ -55,6 +60,10 @@ let search = Vue.component('search', {
         },
         deleteNode(id) {
             this.additionalNodes = this.additionalNodes.filter(node => node.id !== id);
+        },
+        expandSearchView() {
+            this.expand = !this.expand
+            console.log(this.expand)
         }
     },
     template: `
@@ -99,6 +108,31 @@ let search = Vue.component('search', {
                         </button>
                     </div>
                 </div>
+            </div>
+            <div class="addition-settings" v-bind:class="{ expand: expand }">
+                <strong class="start-end-strong">Additional Settings</strong>
+                <div class="algorithm-radio-buttons">
+                    <strong class="start-end-strong">Select an algorithm</strong>
+                    <div class="control">
+                      <label class="radio">
+                        <input type="radio" name="answer" value="A*" v-model="algorithmType" checked>
+                        A*
+                      </label>
+                      <label class="radio" >
+                        <input type="radio" name="answer" value="Bi-direction A*" v-model="algorithmType">
+                        Bi-direction A*
+                      </label>
+                    </div>
+                </div>
+                <div class="algorithm-radio-buttons">
+                      <label id="visualisation-checkbox" class="checkbox">
+                      <input type="checkbox" v-model="visualisation">
+                      <strong class="start-end-strong">Visualisation</strong>
+                    </label>
+                </div>
+            </div>
+            <div class="algorithm-radio-buttons">
+                <button class="button is-rounded expand-search-view-button" @click="expandSearchView"><i style="color:white" class="fas fa-arrow-down"></i></button>
             </div>
         </div>
     </div>`
