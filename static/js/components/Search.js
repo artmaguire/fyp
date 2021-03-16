@@ -11,6 +11,11 @@ let search = Vue.component('search', {
                 {type: 'scenic', icon: 'fa-truck'}],
             algorithmType: 'A*',
             visualisation: false,
+            expandIcon: 'fa-arrow-down',
+            expandRouteDetails: false,
+            distance: '10km',
+            time: '8min',
+            routeDetails: false,
             expand: false
         }
     },
@@ -54,6 +59,7 @@ let search = Vue.component('search', {
                 // for (let branch of response.data.branch)
                 //     addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
 
+                this.setRouteDetails(response.data.distance, response.data.time)
                 setRouteHistory(response.data.history);
             });
             // displayRoute(this.additionalNodes.map(x => x.id));
@@ -62,8 +68,13 @@ let search = Vue.component('search', {
             this.additionalNodes = this.additionalNodes.filter(node => node.id !== id);
         },
         expandSearchView() {
-            this.expand = !this.expand
+            this.expand = !this.expand;
             console.log(this.expand)
+        },
+        setRouteDetails(distance, time) {
+            this.routeDetails = true;
+            this.distance = Math.round(distance * 100) / 100;
+            this.time = Math.round(time * 100) / 100;
         }
     },
     template: `
@@ -109,6 +120,15 @@ let search = Vue.component('search', {
                     </div>
                 </div>
             </div>
+            
+            <div class="route-details" v-if="routeDetails">
+                <i class="route-stats route-stats-icon fas fa-route"></i>
+                <strong class="route-stats">{{ distance }} km</strong>
+                <strong class="route-stats"><-></strong>
+                <strong class="route-stats">{{ time }} mins</strong>
+                <i class="route-stats route-stats-icon fas fa-clock"></i>
+            </div>
+            
             <div class="addition-settings" v-bind:class="{ expand: expand }">
                 <strong class="start-end-strong">Additional Settings</strong>
                 <div class="algorithm-radio-buttons">
@@ -132,7 +152,14 @@ let search = Vue.component('search', {
                 </div>
             </div>
             <div class="algorithm-radio-buttons">
-                <button class="button is-rounded expand-search-view-button" @click="expandSearchView"><i style="color:white" class="fas fa-arrow-down"></i></button>
+                <button class="button is-rounded expand-search-view-button" @click="expandSearchView" title="Find route">
+                    <span v-show="expand">
+                        <i style="color:white" class="fas fa-arrow-up"></i>
+                    </span>
+                    <span v-show="!expand">
+                        <i style="color:white" class="fas fa-arrow-down"></i>
+                    </span>
+                </button>
             </div>
         </div>
     </div>`

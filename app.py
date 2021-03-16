@@ -61,11 +61,11 @@ def route():
     print(request.args.get('target'))
     print('Algorithm: ', request.args.get('algorithmType'))
     print('Visualisation: ', request.args.get('visualisation'))
+
     source_lat, source_lng = request.args.get('source').split(',')
     target_lat, target_lng = request.args.get('target').split(',')
-
     algorithmType = request.args.get('algorithmType')
-    visualisation = request.args.get('visualisation')
+    visualisation = bool(request.args.get('visualisation'))
 
     if algorithmType == 'A*':
         nodes = dfosm.a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),

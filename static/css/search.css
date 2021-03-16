@@ -224,13 +224,10 @@ html, body {
 }
 
 .addition-settings {
-    width: 0;
-    height: 0;
     display: none;
     text-align: center;
     padding-top: 20px;
     font-size: 18px;
-    transition: width 600ms ease-out, height 600ms ease-out;
 }
 
 .algorithm-radio-buttons {
@@ -250,16 +247,23 @@ html, body {
 }
 
 .expand {
-    width: inherit;
-    height: inherit;
-    transition: width 1s ease-in-out, height 1s;
     display: block;
     overflow: hidden;
 }
 
-.menu--collapsed {
-    width: 200px;
-    height: 60px;
+.route-details {
+    /*display: none;*/
+    text-align: center;
+    padding: inherit;
+}
+
+.route-stats {
+    padding-right: 4px;
+}
+
+.route-stats-icon {
+    font-size: 1.4rem;
+    margin-bottom: -2px;
 }
 
 * {
