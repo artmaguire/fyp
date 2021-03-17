@@ -2,7 +2,7 @@ import logging
 import sys
 
 log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+# log.setLevel(logging.ERROR)
 fh = logging.FileHandler('logs/flask.log')
 fh.setLevel(logging.DEBUG)
 log.addHandler(fh)
@@ -16,5 +16,5 @@ fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
 sh = logging.StreamHandler(sys.stdout)
-sh.setLevel(logging.DEBUG)
+sh.setLevel(logging.INFO)
 logger.addHandler(sh)
