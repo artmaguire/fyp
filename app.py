@@ -5,6 +5,8 @@ from dfosm import DFOSM
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
 
+from constants import Algorithms
+
 from config import conf
 from postgres_helper import get_location_name, open_connection
 
@@ -18,7 +20,7 @@ print(conf.HOST)
 
 # open_connection()
 
-dfosm = DFOSM(conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPORT, conf.EDGES_TABLE,
+dfosm = DFOSM(conf.THREADS, conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPORT, conf.EDGES_TABLE,
               conf.VERTICES_TABLE)
 
 
@@ -64,24 +66,25 @@ def route():
 
     source_lat, source_lng = request.args.get('source').split(',')
     target_lat, target_lng = request.args.get('target').split(',')
-    algorithmType = request.args.get('algorithmType')
-    visualisation = bool(request.args.get('visualisation'))
+    algorithmType = int(request.args.get('algorithmType'))
+    visualisation = bool(int(request.args.get('visualisation')))
 
-    if algorithmType == 'A*':
-        nodes = dfosm.a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
-                                visualisation=visualisation,
-                                history=True)
-    elif algorithmType == 'Bi-direction A*':
-        nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
-                                visualisation=visualisation,
-                                history=True)
+    if algorithmType == Algorithms.DIJKSTRA.value:
+        fn = dfosm.dijkstra
+    elif algorithmType == Algorithms.BI_DIJKSTRA.value:
+        fn = dfosm.bi_dijkstra
+    elif algorithmType == Algorithms.ASTAR.value:
+        fn = dfosm.a_star
+    elif algorithmType == Algorithms.BI_ASTAR.value:
+        fn = dfosm.bi_a_star
     else:
-        nodes = dfosm.bi_a_star(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
-                                visualisation=visualisation,
-                                history=True)
-    print(nodes)
+        fn = dfosm.a_star
 
-    return jsonify(nodes)
+    result = fn(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
+                visualisation=visualisation,
+                history=False)
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':

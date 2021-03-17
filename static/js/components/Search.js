@@ -9,9 +9,9 @@ let search = Vue.component('search', {
                 {type: 'walking', icon: 'fa-walking'},
                 {type: 'scenic', icon: 'fa-bus'},
                 {type: 'scenic', icon: 'fa-truck'}],
-            algorithmType: 'A*',
+            Algorithms: Algorithms,
+            algorithmType: Algorithms.BI_ASTAR,
             visualisation: false,
-            expandIcon: 'fa-arrow-down',
             expandRouteDetails: false,
             distance: '10km',
             time: '8min',
@@ -50,17 +50,26 @@ let search = Vue.component('search', {
                     source: nodeMap.get(0).lat + ',' + nodeMap.get(0).lon,
                     target: nodeMap.get(-1).lat + ',' + nodeMap.get(-1).lon,
                     algorithmType: this.algorithmType,
-                    visualisation: this.visualisation
+                    visualisation: this.visualisation ? 1 : 0
                 }
             }).then(response => {
-                this.$store.commit('SET_ROUTE_LOADING', false)
-                // addGeoJSON(JSON.parse(response.data.route), 0, 0, 0, 0, "crimson", 3);
+                console.log(response)
+                startLatLng = [[nodeMap.get(0).lat, nodeMap.get(0).lon], [response.data.start_point.lat, response.data.start_point.lng]];
+                endLatLng = [[nodeMap.get(-1).lat, nodeMap.get(-1).lon], [response.data.end_point.lat, response.data.end_point.lng]];
+                addDottedLine(startLatLng);
+                addDottedLine(endLatLng);
 
-                // for (let branch of response.data.branch)
-                //     addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
+                if (response.data.branch)
+                    for (let branch of response.data.branch)
+                        addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
 
                 this.setRouteDetails(response.data.distance, response.data.time)
-                setRouteHistory(response.data.history);
+                if (response.data.history)
+                    setRouteHistory(response.data.history);
+                else
+                    addGeoJSON(JSON.parse(response.data.route), 0, 0, 0, 0, "crimson", 3);
+            }).finally(() => {
+                this.$store.commit('SET_ROUTE_LOADING', false);
             });
             // displayRoute(this.additionalNodes.map(x => x.id));
         },
@@ -107,14 +116,13 @@ let search = Vue.component('search', {
             </div>
             <div id="checkbox-search-btn sv-container">
                 <div class="sv-item">
-                    <button class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
+                    <button disabled class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
                         <i class="fa fa-plus"></i>
                     </button>
                     <div id="search-btn">
                         <button id="go-button" title="Find route" class="button is-rounded" @click="goButtonClick">
-                            <span>Go</span>
                             <div class="icon is-small">
-                                <i class="fa fa-check"></i>
+                                <i class="fa fa-search"></i>
                             </div>
                         </button>
                     </div>
@@ -130,34 +138,45 @@ let search = Vue.component('search', {
             </div>
             
             <div class="addition-settings" v-bind:class="{ expand: expand }">
-                <strong class="start-end-strong">Additional Settings</strong>
+                <hr style="margin: 1px">
                 <div class="algorithm-radio-buttons">
                     <strong class="start-end-strong">Select an algorithm</strong>
-                    <div class="control">
+                    <div style="padding-left: 24px;" class="control">
                       <label class="radio">
-                        <input type="radio" name="answer" value="A*" v-model="algorithmType" checked>
+                        <input type="radio" :value="Algorithms.DIJKSTRA" v-model="algorithmType">
+                        Dijkstra
+                      </label>
+                      <br>
+                      <label class="radio" >
+                        <input type="radio" :value="Algorithms.BI_DIJKSTRA" v-model="algorithmType">
+                        Bi-directional Dijkstra
+                      </label>
+                      <br>
+                      <label class="radio" >
+                        <input type="radio" :value="Algorithms.ASTAR" v-model="algorithmType">
                         A*
                       </label>
+                      <br>
                       <label class="radio" >
-                        <input type="radio" name="answer" value="Bi-direction A*" v-model="algorithmType">
-                        Bi-direction A*
+                        <input type="radio" :value="Algorithms.BI_ASTAR" v-model="algorithmType" checked>
+                        Bi-directional A*
                       </label>
                     </div>
                 </div>
-                <div class="algorithm-radio-buttons">
+                <div style="padding-left: 16px;" class="algorithm-radio-buttons">
                       <label id="visualisation-checkbox" class="checkbox">
                       <input type="checkbox" v-model="visualisation">
                       <strong class="start-end-strong">Visualisation</strong>
                     </label>
                 </div>
             </div>
-            <div class="algorithm-radio-buttons">
-                <button class="button is-rounded expand-search-view-button" @click="expandSearchView" title="Find route">
+            <div class="algorithm-radio-dropdown">
+                <button class="button is-rounded is-small expand-search-view-button" @click="expandSearchView" title="Additional Settings">
                     <span v-show="expand">
-                        <i style="color:white" class="fas fa-arrow-up"></i>
+                        <i style="color:crimson" class="fas fa-chevron-up fa-lg"></i>
                     </span>
                     <span v-show="!expand">
-                        <i style="color:white" class="fas fa-arrow-down"></i>
+                        <i style="color:crimson" class="fas fa-chevron-down fa-lg"></i>
                     </span>
                 </button>
             </div>

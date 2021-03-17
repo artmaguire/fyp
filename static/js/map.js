@@ -312,15 +312,15 @@ colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
     '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
     '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 3) {
+function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 1, popup=false) {
     if (!color)
         color = colors[Math.floor(Math.random() * colors.length)]
 
     geoJSONLayer = L.geoJSON(routeGeoJSON, {
-        onEachFeature: (feature, layer) => {
+        onEachFeature: popup ? (feature, layer) => {
             layer.bindPopup(`Cost: ${Math.round(cost * 100) / 100}, TCost: ${Math.round(totalCost * 100) / 100}, #
             D: ${Math.round(distance * 100) / 100}km, DM: ${Math.round(distanceMinutes * 100) / 100}m`);
-        },
+        } : null,
         style: () => {
             return {color: color, weight: weight};
         }
@@ -333,6 +333,11 @@ function removeGeoJSON() {
 
     routeHistory = [];
     routeHistoryIndex = 0;
+}
+
+function addDottedLine(LatLngArray) {
+    let polyline = L.polyline(LatLngArray, {color: 'slategrey', dashArray: '5,10', weight: 2});
+    routeLayerGroup.addLayer(polyline);
 }
 
 let routeHistory = [];
@@ -353,7 +358,7 @@ function routeHistoryNext(count = 1) {
 
         for (let node of nodes)
             addGeoJSON(JSON.parse(node.geojson), cost = node.cost, totalCost = node.total_cost, distance = node.distance,
-                distanceMinutes = node.distance_minutes);
+                distanceMinutes = node.distance_minutes, null, 3);
         routeHistoryIndex++;
     }
 }
