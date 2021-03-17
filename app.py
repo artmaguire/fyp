@@ -9,14 +9,14 @@ from constants import Algorithms
 
 from config import conf
 from postgres_helper import get_location_name, open_connection
+import log_helper
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+logger = logging.getLogger('dfosm_server')
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-print(conf.HOST)
+logger.info(conf.HOST)
 
 # open_connection()
 
@@ -26,6 +26,9 @@ dfosm = DFOSM(conf.THREADS, conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHO
 
 @socketio.on('geoname_search')
 def handle_geoname(data):
+    logger.debug('********************   START SEARCH   ********************')
+    logger.debug(str(data))
+
     query = "https://eu1.locationiq.com/v1/autocomplete.php"
 
     params = {
@@ -41,6 +44,10 @@ def handle_geoname(data):
 
     res = requests.get(query, params)
     result = {"node": data.get("node"), "geonames": res.json()}
+
+    logger.debug(str(result))
+    logger.debug('********************   END   SEARCH   ********************')
+
     emit('geoname_result', result)
 
 
@@ -49,20 +56,21 @@ def home():
     return app.send_static_file('index.html')
 
 
-@app.route('/search', methods=['GET'])
-def search():
-    open_connection()
-    name = request.args.get('name')
-    results = get_location_name(name)
-    return jsonify(results)
+# @app.route('/search', methods=['GET'])
+# def search():
+#     open_connection()
+#     name = request.args.get('name')
+#     results = get_location_name(name)
+#     return jsonify(results)
 
 
 @app.route('/route', methods=['GET'])
 def route():
-    print(request.args.get('source'))
-    print(request.args.get('target'))
-    print('Algorithm: ', request.args.get('algorithmType'))
-    print('Visualisation: ', request.args.get('visualisation'))
+    logger.info('********************   START ROUTE   ********************')
+    logger.info(request.args.get('source'))
+    logger.info(request.args.get('target'))
+    logger.info('Algorithm: ' + request.args.get('algorithmType'))
+    logger.info('Visualisation: ' + request.args.get('visualisation'))
 
     source_lat, source_lng = request.args.get('source').split(',')
     target_lat, target_lng = request.args.get('target').split(',')
@@ -83,6 +91,8 @@ def route():
     result = fn(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
                 visualisation=visualisation,
                 history=False)
+
+    logger.info('********************   END   ROUTE   ********************')
 
     return jsonify(result)
 
