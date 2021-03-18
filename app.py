@@ -8,17 +8,12 @@ from flask_socketio import SocketIO, emit
 from constants import Algorithms
 
 from config import conf
-from postgres_helper import get_location_name, open_connection
 import log_helper
 
 logger = logging.getLogger('dfosm_server')
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-
-logger.info(conf.HOST)
-
-# open_connection()
 
 dfosm = DFOSM(conf.THREADS, conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPORT, conf.EDGES_TABLE,
               conf.VERTICES_TABLE)
@@ -98,7 +93,6 @@ def route():
 
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    app.debug = conf.DEBUG
     app.run(debug=conf.DEBUG, host=conf.HOST, port=conf.PORT)
-    socketio.run(app)
+    logger.info(f"Flask running at: {conf.HOST}:{conf.PORT} with debugging: {conf.DEBUG}")

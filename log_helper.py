@@ -1,5 +1,9 @@
 import logging
+import pathlib
 import sys
+
+pathlib.Path("logs").mkdir(parents=True, exist_ok=True)
+
 
 log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)

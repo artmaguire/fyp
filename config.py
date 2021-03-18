@@ -2,9 +2,9 @@ from decouple import config
 
 
 class Config(object):
-    HOST = config('HOST', default='0.0.0.0')
-    PORT = config('PORT', default=5000, cast=int)
-    DEBUG = config('DEBUG', default=False, cast=bool)
+    HOST = config('FLASK_RUN_HOST', default='0.0.0.0')
+    PORT = config('FLASK_RUN_PORT', default=5000, cast=int)
+    DEBUG = config('FLASK_DEBUG', default=False, cast=bool)
     THREADS = config('THREADS', default=6, cast=int)
 
     DBNAME = config('DBNAME')
