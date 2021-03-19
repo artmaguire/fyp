@@ -12,6 +12,7 @@ let search = Vue.component('search', {
             Algorithms: Algorithms,
             algorithmType: Algorithms.BI_ASTAR,
             visualisation: false,
+            routeDetailsDownload: {},
             expandRouteDetails: false,
             distance: '10km',
             time: '8min',
@@ -53,7 +54,6 @@ let search = Vue.component('search', {
                     visualisation: this.visualisation ? 1 : 0
                 }
             }).then(response => {
-                console.log(response)
                 startLatLng = [[nodeMap.get(0).lat, nodeMap.get(0).lon], [response.data.start_point.lat, response.data.start_point.lng]];
                 endLatLng = [[nodeMap.get(-1).lat, nodeMap.get(-1).lon], [response.data.end_point.lat, response.data.end_point.lng]];
                 addDottedLine(startLatLng);
@@ -64,6 +64,8 @@ let search = Vue.component('search', {
                         addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
 
                 this.setRouteDetails(response.data.distance, response.data.time)
+                this.routeDetailsDownload = response.data.route;
+
                 if (response.data.history)
                     setRouteHistory(response.data.history);
                 else
@@ -78,12 +80,19 @@ let search = Vue.component('search', {
         },
         expandSearchView() {
             this.expand = !this.expand;
-            console.log(this.expand)
         },
         setRouteDetails(distance, time) {
             this.routeDetails = true;
             this.distance = Math.round(distance * 100) / 100;
             this.time = Math.round(time * 100) / 100;
+        },
+        downloadRoute() {
+            const blob = new Blob([this.routeDetailsDownload], {type: 'application/pdf'})
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(blob)
+            link.download = 'route.json'
+            link.click()
+            URL.revokeObjectURL(link.href)
         }
     },
     template: `
@@ -135,6 +144,7 @@ let search = Vue.component('search', {
                 <strong class="route-stats"><-></strong>
                 <strong class="route-stats">{{ time }} mins</strong>
                 <i class="route-stats route-stats-icon fas fa-clock"></i>
+                <a title="Export Route" @click="downloadRoute"><i class="route-download-icon fas fa-file-export"></i></a>
             </div>
             
             <div class="addition-settings" v-bind:class="{ expand: expand }">

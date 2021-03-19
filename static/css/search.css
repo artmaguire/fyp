@@ -265,6 +265,14 @@ html, body {
     margin-bottom: -2px;
 }
 
+.route-download-icon {
+    margin-left: 24px;
+    font-size: 1.3rem;
+    margin-bottom: -2px;
+    color: crimson;
+    cursor: pointer;
+}
+
 * {
     font-family: 'Lato', sans-serif;
 }
