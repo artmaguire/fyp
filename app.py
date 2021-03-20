@@ -15,8 +15,9 @@ logger = logging.getLogger('dfosm_server')
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-dfosm = DFOSM(conf.THREADS, conf.DBNAME, conf.DBUSER, conf.DBPASSWORD, conf.DBHOST, conf.DBPORT, conf.EDGES_TABLE,
-              conf.VERTICES_TABLE)
+dfosm = DFOSM(threads=conf.THREADS, timeout=conf.TIMEOUT, dbname=conf.DBNAME, dbuser=conf.DBUSER,
+              dbpassword=conf.DBPASSWORD, dbhost=conf.DBHOST, dbport=conf.DBPORT, edges_table=conf.EDGES_TABLE,
+              vertices_table=conf.VERTICES_TABLE)
 
 
 @socketio.on('geoname_search')
@@ -87,6 +88,7 @@ def route():
                 visualisation=visualisation,
                 history=False)
 
+    logger.debug(result)
     logger.info('********************   END   ROUTE   ********************')
 
     return jsonify(result)

@@ -54,6 +54,11 @@ let search = Vue.component('search', {
                     visualisation: this.visualisation ? 1 : 0
                 }
             }).then(response => {
+                let err = response?.data?.error?.code;
+                if (err && err < 0) {
+                    alert("Route Finding Error. Probably TIMEOUT.");
+                    return;
+                }
                 startLatLng = [[nodeMap.get(0).lat, nodeMap.get(0).lon], [response.data.start_point.lat, response.data.start_point.lng]];
                 endLatLng = [[nodeMap.get(-1).lat, nodeMap.get(-1).lon], [response.data.end_point.lat, response.data.end_point.lng]];
                 addDottedLine(startLatLng);
