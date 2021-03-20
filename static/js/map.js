@@ -119,12 +119,20 @@ const startIcon = L.icon({
 
 const map = L.map('mapid', {}).setView([irelandView.x, irelandView.y], irelandView.zoom);
 
-const defaultMap = document.cookie.match(/^(.*;)?\s*baseMap\s*=\s*[^;]+(.*)?$/)
+const defaultMap = document.cookie.match(/^(.*;)?\s*baseMap\s*=\s*[^;]+(.*)?$/);
 if (defaultMap === null) {
     streets.addTo(map);
 } else {
     const baseMap = getPreviousMap()
     baseMaps[baseMap].addTo(map);
+}
+
+const lastMapBounds = getPreviousMapBounds();
+if (lastMapBounds === null) {
+    locateUser()
+} else {
+    let bounds = lastMapBounds.split(",");
+    map.fitBounds([[parseFloat(bounds[1]), parseFloat(bounds[0])], [parseFloat(bounds[3]), parseFloat(bounds[2])]])
 }
 
 // Add all map layers
@@ -138,7 +146,6 @@ L.control.zoom({
 
 // Asks for user location
 let userLocation = []
-locateUser();
 
 // Button for users location
 L.easyButton('<div title="Your location"><i class="fas fa-map-marker-alt"</i></div>', function (btn, map) {
@@ -176,6 +183,13 @@ function getPreviousMap() {
     return document.cookie
         .split('; ')
         .find(row => row.startsWith('baseMap'))
+        .split('=')[1];
+}
+
+function getPreviousMapBounds() {
+    return document.cookie
+        .split('; ')
+        .find(row => row.startsWith('lastSearch'))
         .split('=')[1];
 }
 
@@ -300,16 +314,19 @@ window.onbeforeunload = function () {
         mapId = m
     }
 
-    let cookieString = "baseMap=";
+    let mapCookieString = "baseMap=";
     for (let m of maps) {
         if (m[1].options['id'] === map._layers[mapId].options['id']) {
-            document.cookie = cookieString += m[0];
+            document.cookie = mapCookieString += m[0];
         }
     }
+
+    console.log(getBoundsLngLat())
+    document.cookie = "lastSearch=" + getBoundsLngLat();
 };
 
 function getBoundsLngLat() {
-    return map.getBounds().toBBoxString()
+    return map.getBounds().toBBoxString();
 }
 
 let routeLayerGroup = L.layerGroup().addTo(map);
