@@ -45,7 +45,7 @@ let nodeSearch = Vue.component('node-search', {
             if (data.node !== this.id)
                 return;
 
-            console.log(data);
+            // console.log(data);
             this.searchResults = data.geonames;
         }
     },
