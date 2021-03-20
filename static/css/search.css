@@ -141,6 +141,20 @@ html, body {
     color: white;
 }
 
+.reverse-waypoints {
+    padding: 4px;
+    font-size: 1.4rem;
+    height: 100%;
+    display: inline;
+}
+
+.cancel-route {
+    font-size: 1.4rem;
+    height: 100%;
+    float: right;
+    padding: 0;
+}
+
 .sv-icon:hover {
     color: crimson;
     cursor: pointer;
@@ -266,11 +280,15 @@ html, body {
 }
 
 .route-download-icon {
-    margin-left: 24px;
+    margin-left: 12px;
     font-size: 1.3rem;
     margin-bottom: -2px;
     color: crimson;
     cursor: pointer;
+}
+
+#visualisation-checkbox {
+    padding: 8px 0 0 8px;
 }
 
 * {

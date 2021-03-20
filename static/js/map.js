@@ -230,6 +230,15 @@ function removeMarker(markerId) {
     map.removeLayer(marker)
 }
 
+function reverseMarkers(startName, endName) {
+    let startMarker = markerMap.get(0);
+    let endMarker = markerMap.get(-1);
+    markerMap.set(0, endMarker);
+    markerMap.set(1, startMarker);
+    addMarker(startName, startMarker['_latlng']['lat'], startMarker['_latlng']['lng'], -1, -1);
+    addMarker(endName, endMarker['_latlng']['lat'], endMarker['_latlng']['lng'], 0, 0);
+}
+
 function removeRoute() {
     if (!routingControl)
         return;

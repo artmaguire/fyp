@@ -2,12 +2,20 @@
 // This can be reused for all node searches
 // Templating for searching
 let loadingScreen = Vue.component('loading-screen', {
-    methods: {},
+    methods: {
+        cancelRoute() {
+            // TODO: Trigger cancel route
+            console.log('cancel');
+        }
+    },
     props: {type: String},
     template: `<div id="loading-background">
         <div class="container-loading">
             <div class="finding-route-card">
                 <!-- The loader will be here -->
+                <button class="button cancel-route" title="Cancel route" @click="cancelRoute">
+                    <i class="fa fa-times-circle"></i>
+                </button>
                 <h2 class="finding-route-text">
                     Finding Route...
                 </h2>

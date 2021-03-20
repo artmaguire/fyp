@@ -81,6 +81,27 @@ let search = Vue.component('search', {
         expandSearchView() {
             this.expand = !this.expand;
         },
+        reverseWayPoints() {
+            let nodeMap = this.$store.getters.getNodes;
+
+            if (nodeMap.get(0) == null && nodeMap.get(-1) == null) {
+                return;
+            }
+
+            // TODO: Reverse values at index -1, 0 in the NodeMap
+            let start = nodeMap.get(0);
+            let end = nodeMap.get(-1);
+            nodeMap.set(0, end);
+            nodeMap.set(-1, start);
+
+            // TODO: Update the search
+
+            // TODO: Update the UI is markers are already on it
+            reverseMarkers(start['address']['name'], end['address']['name']);
+
+            // TODO: Make sure that markerMap and nodeMap arent deleted after the search is finished
+
+        },
         setRouteDetails(distance, time) {
             this.routeDetails = true;
             this.distance = Math.round(distance * 100) / 100;
@@ -128,6 +149,9 @@ let search = Vue.component('search', {
                     <button disabled class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
                         <i class="fa fa-plus"></i>
                     </button>
+                    <button class="button reverse-waypoints" title="Reverse waypoints" @click="reverseWayPoints">
+                        <i class="fa fa-retweet"></i>
+                    </button>
                     <div id="search-btn">
                         <button id="go-button" title="Find route" class="button is-rounded" @click="goButtonClick">
                             <div class="icon is-small">
@@ -173,7 +197,7 @@ let search = Vue.component('search', {
                       </label>
                     </div>
                 </div>
-                <div style="padding-left: 16px;" class="algorithm-radio-buttons">
+                <div id="visualisation-checkbox" class="algorithm-radio-buttons">
                       <label id="visualisation-checkbox" class="checkbox">
                       <input type="checkbox" v-model="visualisation">
                       <strong class="start-end-strong">Visualisation</strong>
