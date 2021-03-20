@@ -6,6 +6,7 @@ class Config(object):
     PORT = config('FLASK_RUN_PORT', default=5000, cast=int)
     DEBUG = config('FLASK_DEBUG', default=False, cast=bool)
     THREADS = config('THREADS', default=6, cast=int)
+    TIMEOUT = config('TIMEOUT', default=120, cast=int)
 
     DBNAME = config('DBNAME')
     DBUSER = config('DBUSER')
