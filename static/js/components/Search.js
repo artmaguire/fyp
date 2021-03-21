@@ -56,7 +56,12 @@ let search = Vue.component('search', {
             }).then(response => {
                 let err = response?.data?.error?.code;
                 if (err && err < 0) {
-                    alert("Route Finding Error. Probably TIMEOUT.");
+                    Swal.fire({
+                        title: 'Calculation Timeout',
+                        text: 'Could not find your route.',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    }).then(r => console.log('Not enough nodes'));
                     return;
                 }
                 startLatLng = [[nodeMap.get(0).lat, nodeMap.get(0).lon], [response.data.start_point.lat, response.data.start_point.lng]];
