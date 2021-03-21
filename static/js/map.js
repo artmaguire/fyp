@@ -1,9 +1,9 @@
 // Leaflet JS OpenStreetMapMapbox Map
 
 // Mapbox tokens for different maps
-const mapboxAccessToken = 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg'
-const mapBoxURL = `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapboxAccessToken}`
-const mapBoxAttribute = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+const mapboxAccessToken = 'pk.eyJ1IjoiYXJ0bWFndWlyZSIsImEiOiJja2poYmxqMmUzZDdnMnRtdGUwbXVsMjgyIn0.fptDfptTcoror2IzzbBchg';
+const mapBoxURL = `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapboxAccessToken}`;
+const mapBoxAttribute = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
 
 // Different MapBox maps including: Streets-V11, Dark-V10, Light-V10, Satellite-V11
 const streets = L.tileLayer(mapBoxURL, {
@@ -40,10 +40,10 @@ const streets = L.tileLayer(mapBoxURL, {
     });
 
 const maps = new Map();
-maps.set("Streets", streets)
-maps.set("Dark", dark)
-maps.set("Light", light)
-maps.set("Satellite", satelliteStreets)
+maps.set("Streets", streets);
+maps.set("Dark", dark);
+maps.set("Light", light);
+maps.set("Satellite", satelliteStreets);
 
 let baseMaps = {
     "Streets": streets,
@@ -127,13 +127,15 @@ if (defaultMap === null) {
     baseMaps[baseMap].addTo(map);
 }
 
-const lastMapBounds = getPreviousMapBounds();
-if (lastMapBounds === null) {
-    locateUser()
-} else {
-    let bounds = lastMapBounds.split(",");
-    map.fitBounds([[parseFloat(bounds[1]), parseFloat(bounds[0])], [parseFloat(bounds[3]), parseFloat(bounds[2])]])
+const lastSearch = document.cookie.match(/^(.*;)?\s*lastSearch\s*=\s*[^;]+(.*)?$/);
+if (lastSearch) {
+    let lastMapBounds = getPreviousMapBounds();
+    if (lastMapBounds) {
+        let bounds = lastMapBounds.split(",");
+        map.fitBounds([[parseFloat(bounds[1]), parseFloat(bounds[0])], [parseFloat(bounds[3]), parseFloat(bounds[2])]])
+    }
 }
+
 
 // Add all map layers
 L.control.layers(baseMaps).addTo(map);
@@ -158,7 +160,7 @@ L.easyButton('<div title="Your location"><i class="fas fa-map-marker-alt"</i></d
             icon: 'error',
             confirmButtonText: 'Ok'
         }).then(r => {
-            locateUser()
+            locateUser();
         });
     }
 }, {position: 'bottomright'}).addTo(map);
@@ -170,7 +172,7 @@ let routingControl = null;
 let geoJSONLayer = null;
 
 function locateUser() {
-    map.locate({enableHighAccuracy: true}) /* This will return map so you can do chaining */
+    map.locate({enableHighAccuracy: true})
         .on('locationfound', function (e) {
             userLocation = [e.latitude, e.longitude]
             map.setView([e.latitude, e.longitude], 12);
@@ -187,10 +189,16 @@ function getPreviousMap() {
 }
 
 function getPreviousMapBounds() {
-    return document.cookie
+    let lastSearchCookie = document.cookie
         .split('; ')
         .find(row => row.startsWith('lastSearch'))
         .split('=')[1];
+
+    if (!lastSearchCookie) {
+        locateUser();
+    } else {
+        return lastSearchCookie;
+    }
 }
 
 const markerMap = new Map();
@@ -309,9 +317,9 @@ function displayRoute(additionalNodes) {
 
 // Saves current map layer to cookie when the user leaves the page
 window.onbeforeunload = function () {
-    let mapId = 0
+    let mapId = 0;
     for (let m in map._layers) {
-        mapId = m
+        mapId = m;
     }
 
     let mapCookieString = "baseMap=";
@@ -321,7 +329,6 @@ window.onbeforeunload = function () {
         }
     }
 
-    console.log(getBoundsLngLat())
     document.cookie = "lastSearch=" + getBoundsLngLat();
 };
 
