@@ -86,7 +86,7 @@ def route():
 
     result = fn(float(source_lat), float(source_lng), float(target_lat), float(target_lng),
                 visualisation=visualisation,
-                history=False)
+                history=True)
 
     logger.debug(result)
     logger.info('********************   END   ROUTE   ********************')

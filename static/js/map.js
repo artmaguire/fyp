@@ -205,7 +205,6 @@ const markerMap = new Map();
 
 function addMarker(name, lat, lon, key, id) {
     if (markerMap.has(key)) {
-        console.log("ave it")
         map.removeLayer(markerMap.get(key));
     }
 
@@ -349,7 +348,7 @@ colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
     '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
     '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 1, popup = false) {
+function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 1, popup = true) {
     if (!color)
         color = colors[Math.floor(Math.random() * colors.length)]
 
