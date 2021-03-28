@@ -7,19 +7,54 @@ html, body {
     overflow: hidden;
 }
 
-#search-view {
+.show-search-view {
+    visibility: visible !important;
+}
+
+.search-view {
     transition: opacity 2.5s;
+    width: 375px;
     opacity: 0.5;
-    width: 350px;
     position: absolute;
     top: 20px;
     left: 20px;
     z-index: 5000;
+}
+
+.search-view-collapse-button {
+    float: right;
+    width: 40px;
+    height: 90px;
+    margin-right: -39px;
+    margin-top: -43%;
+    background-color: white;
+    box-shadow: 0 0 5px 0 rgb(233, 233, 233);
+    visibility: hidden;
+}
+
+.search-view-expand-button {
+    top: 10px;
+    left: 10px;
+    box-shadow: 0 0 5px 5px rgb(233, 233, 233);
+    visibility: hidden;
+    padding: 26px;
+    background: white;
+    position: absolute;
+}
+
+.collapse {
+    color: crimson;
+    font-size: 2rem;
+    margin-left: 18%;
+    margin-top: 77%;
+}
+
+.search-view-content {
     background: white;
     overflow: hidden;
 }
 
-#search-view:hover {
+.search-view:hover {
     opacity: 1;
     transition: opacity 0.3s;
 }
@@ -60,6 +95,10 @@ html, body {
 .sv-inputs {
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+.search-inputs-hr {
+    margin: 2px;
 }
 
 .sv-container {
@@ -289,6 +328,119 @@ html, body {
 
 #visualisation-checkbox {
     padding: 8px 0 0 8px;
+}
+
+.minimised-search-view-icon {
+    color: crimson;
+    font-size: 5rem;
+}
+
+.minimised-search-view {
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    padding: 26px;
+    background: white;
+    position: absolute;
+    z-index: 5001;
+}
+
+/* MEDIA QUERIES FOR MOBILE USE */
+@media (max-width: 1000px) {
+    .search-view {
+        width: calc(100% - 175px);
+        top: 10px;
+        left: 10px;
+        zoom: 1.2;
+        visibility: hidden;
+    }
+
+    .search-view-section {
+        padding: 4px 4px 0 4px;
+    }
+
+    #transport-icons {
+        margin: 2px;
+    }
+
+    .sv-icon {
+        padding: 0 28px;
+        font-size: 2.6rem;
+    }
+
+    .sv-container {
+        margin: -8px;
+    }
+
+    .sv-inputs {
+        margin-top: 12px;
+        zoom: 1.8;
+    }
+
+    .search-view-header {
+        padding: 0;
+        font-size: 32px;
+    }
+
+    .checkbox-search-btn {
+        margin-top: -22px;
+    }
+
+    .add-node {
+        font-size: 2.4rem;
+    }
+
+    .reverse-waypoints {
+        font-size: 2.4rem;
+    }
+
+    #go-button {
+        font-size: 1.8rem;
+    }
+
+    .addition-settings {
+        font-size: 2rem;
+    }
+
+    .control {
+        font-size: 1.6rem;
+    }
+
+    .search-inputs-hr {
+        visibility: hidden;
+    }
+
+    .phone-expand {
+        font-size: 1.4rem !important;
+    }
+
+    .route-details {
+        font-size: 2rem;
+    }
+
+    .route-stats-icon {
+        font-size: 2.2rem;
+    }
+
+    .route-details-download {
+        font-size: 2rem;
+    }
+
+    #splash-screen * {
+        zoom: 1.8;
+    }
+
+    .minimised-search-view {
+        visibility: visible;
+    }
+
+    .search-view-collapse-button {
+        visibility: visible;
+    }
+
+    .search-view-expand-button {
+        visibility: visible;
+    }
 }
 
 * {
