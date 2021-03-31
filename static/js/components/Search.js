@@ -14,8 +14,8 @@ let search = Vue.component('search', {
             visualisation: false,
             routeDetailsDownload: {},
             expandRouteDetails: false,
-            distance: '10km',
-            time: '8min',
+            distance: '',
+            time: '',
             routeDetails: false,
             expand: false,
             hideSearchView: false
@@ -72,9 +72,9 @@ let search = Vue.component('search', {
 
                 if (response.data.branch)
                     for (let branch of response.data.branch)
-                        addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance)
+                        addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance);
 
-                this.setRouteDetails(response.data.distance, response.data.time)
+                this.setRouteDetails(response.data.distance, this.formatTime(response.data.time));
                 this.routeDetailsDownload = response.data.route;
 
                 if (response.data.history)
@@ -94,7 +94,6 @@ let search = Vue.component('search', {
         },
         collapseSearchView() {
             this.hideSearchView = !this.hideSearchView;
-            console.log("show/hide", this.hideSearchView);
         },
         reverseWayPoints() {
             let nodeMap = this.$store.getters.getNodes;
@@ -118,9 +117,10 @@ let search = Vue.component('search', {
 
         },
         setRouteDetails(distance, time) {
+            console.log(distance, time)
             this.routeDetails = true;
             this.distance = Math.round(distance * 100) / 100;
-            this.time = Math.round(time * 100) / 100;
+            this.time = time;
         },
         downloadRoute() {
             const blob = new Blob([this.routeDetailsDownload], {type: 'application/pdf'})
@@ -129,6 +129,20 @@ let search = Vue.component('search', {
             link.download = 'route.json'
             link.click()
             URL.revokeObjectURL(link.href)
+        },
+        formatTime(time) {
+            let routeTime = parseFloat(time)
+            if (routeTime < 60) {
+                let minutes = Math.ceil(routeTime);
+                minutes = (minutes < 2) ? minutes += 'min' : minutes += ' mins';
+                return minutes;
+            } else {
+                let hours = Math.floor(routeTime / 60);
+                let minutes = Math.ceil((routeTime % 60));
+                minutes = (minutes < 2) ? minutes += 'min' : minutes += ' mins';
+                hours = (hours < 2) ? hours += ' hr' : hours += ' hrs';
+                return hours + ' ' + minutes;
+            }
         }
     },
     template: `
@@ -182,7 +196,7 @@ let search = Vue.component('search', {
                     <i class="route-stats route-stats-icon fas fa-route"></i>
                     <strong class="route-stats">{{ distance }} km</strong>
                     <strong class="route-stats"><-></strong>
-                    <strong class="route-stats">{{ time }} mins</strong>
+                    <strong class="route-stats">{{ time }}</strong>
                     <i class="route-stats route-stats-icon fas fa-clock"></i>
                     <a title="Export Route" class="route-details-download" @click="downloadRoute"><i class="route-download-icon fas fa-file-export"></i></a>
                 </div>
