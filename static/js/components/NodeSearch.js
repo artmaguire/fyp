@@ -37,6 +37,13 @@ let nodeSearch = Vue.component('node-search', {
 
                 removeMarker(this.id);
             }
+        },
+        searchChangeEnter: function () {
+            if (this.nodeInput === '')
+                return
+
+            this.searchSelected(this.searchResults[0]);
+            this.closeSearchList();
         }
     },
     props: {id: Number, index: Number},
@@ -45,7 +52,6 @@ let nodeSearch = Vue.component('node-search', {
             if (data.node !== this.id)
                 return;
 
-            // console.log(data);
             this.searchResults = data.geonames;
         }
     },
@@ -76,7 +82,7 @@ let nodeSearch = Vue.component('node-search', {
                         <strong class="start-end-strong">{{ label }}</strong>
                     </div>
                     <div class="sv-input sv-item control has-icons-right">
-                        <input v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true"
+                        <input v-on:keyup.enter="searchChangeEnter" v-model.trim="nodeInput" @keyup="searchChange" @focus="isSearching = true"
                         @blur="closeSearchList" class="input is-rounded" autocomplete="off"
                         type="text" :placeholder="placeholder">
                         <span class="icon is-small is-right">
