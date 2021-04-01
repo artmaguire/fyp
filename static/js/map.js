@@ -136,7 +136,6 @@ if (lastSearch) {
     }
 }
 
-
 // Add all map layers
 L.control.layers(baseMaps).addTo(map);
 
@@ -333,6 +332,10 @@ window.onbeforeunload = function () {
 
 function getBoundsLngLat() {
     return map.getBounds().toBBoxString();
+}
+
+function changeMapToLight() {
+    light.addTo(map);
 }
 
 let routeLayerGroup = L.layerGroup().addTo(map);

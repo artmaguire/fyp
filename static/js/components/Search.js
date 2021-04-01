@@ -102,22 +102,18 @@ let search = Vue.component('search', {
                 return;
             }
 
-            // TODO: Reverse values at index -1, 0 in the NodeMap
             let start = nodeMap.get(0);
             let end = nodeMap.get(-1);
             nodeMap.set(0, end);
             nodeMap.set(-1, start);
 
             // TODO: Update the search
+            this.$store.commit('SET_NODE_MAP', nodeMap);
+            nodeSearch.updateSearchInputs(nodeMap.get(0))
 
-            // TODO: Update the UI is markers are already on it
             reverseMarkers(start['address']['name'], end['address']['name']);
-
-            // TODO: Make sure that markerMap and nodeMap arent deleted after the search is finished
-
         },
         setRouteDetails(distance, time) {
-            console.log(distance, time)
             this.routeDetails = true;
             this.distance = Math.round(distance * 100) / 100;
             this.time = time;

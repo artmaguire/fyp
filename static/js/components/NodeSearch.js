@@ -29,6 +29,7 @@ let nodeSearch = Vue.component('node-search', {
             }, 120);
         },
         deleteSearch: function () {
+            console.log(this.nodeData);
             if (this.nodeInput !== '') {
                 if (this.id > 0)
                     this.$parent.deleteNode(this.id);

@@ -345,6 +345,27 @@ html, body {
     z-index: 5001;
 }
 
+.all-roads-limerick-button {
+    transition: opacity 2.5s;
+    opacity: 0.5;
+    bottom: 20px;
+    left: 20px;
+    padding: 16px;
+    background: white;
+    position: absolute;
+    z-index: 500;
+}
+
+.all-roads-limerick-button:hover {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.all-roads-limerick-icon {
+    color: #2d456b;
+    font-size: 3rem;
+}
+
 /* MEDIA QUERIES FOR MOBILE USE */
 @media (max-width: 1000px) {
     .search-view {
@@ -440,6 +461,10 @@ html, body {
 
     .search-view-expand-button {
         visibility: visible;
+    }
+
+    .all-roads-limerick-button {
+        visibility: hidden;
     }
 }
 
