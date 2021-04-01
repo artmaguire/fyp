@@ -353,6 +353,7 @@ html, body {
     padding: 16px;
     background: white;
     position: absolute;
+    cursor: pointer;
     z-index: 500;
 }
 

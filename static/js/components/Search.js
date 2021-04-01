@@ -7,8 +7,7 @@ let search = Vue.component('search', {
                 {type: 'driving', icon: 'fa-car'},
                 {type: 'cycling', icon: 'fa-bicycle'},
                 {type: 'walking', icon: 'fa-walking'},
-                {type: 'scenic', icon: 'fa-bus'},
-                {type: 'scenic', icon: 'fa-truck'}],
+                {type: 'courier', icon: 'fa-truck'}],
             Algorithms: Algorithms,
             algorithmType: Algorithms.BI_ASTAR,
             visualisation: false,
@@ -51,6 +50,12 @@ let search = Vue.component('search', {
                 params: {
                     source: nodeMap.get(0).lat + ',' + nodeMap.get(0).lon,
                     target: nodeMap.get(-1).lat + ',' + nodeMap.get(-1).lon,
+                    via1: (nodeMap.has(1)) ? nodeMap.get(1).lat + ',' + nodeMap.get(1).lon : '',
+                    via2: (nodeMap.has(2)) ? nodeMap.get(2).lat + ',' + nodeMap.get(2).lon : '',
+                    via3: (nodeMap.has(3)) ? nodeMap.get(3).lat + ',' + nodeMap.get(3).lon : '',
+                    via4: (nodeMap.has(4)) ? nodeMap.get(4).lat + ',' + nodeMap.get(4).lon : '',
+                    via5: (nodeMap.has(5)) ? nodeMap.get(5).lat + ',' + nodeMap.get(5).lon : '',
+                    nodeMap: JSON.stringify(Array.from(nodeMap.entries())),
                     algorithmType: this.algorithmType,
                     visualisation: this.visualisation ? 1 : 0
                 }
@@ -65,22 +70,33 @@ let search = Vue.component('search', {
                     }).then(r => console.log('Not enough nodes'));
                     return;
                 }
-                startLatLng = [[nodeMap.get(0).lat, nodeMap.get(0).lon], [response.data.start_point.lat, response.data.start_point.lng]];
-                endLatLng = [[nodeMap.get(-1).lat, nodeMap.get(-1).lon], [response.data.end_point.lat, response.data.end_point.lng]];
-                addDottedLine(startLatLng);
-                addDottedLine(endLatLng);
 
-                if (response.data.branch)
-                    for (let branch of response.data.branch)
-                        addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance);
+                let time = 0, distance = 0;
+                let downloadRoute = [];
 
-                this.setRouteDetails(response.data.distance, this.formatTime(response.data.time));
-                this.routeDetailsDownload = response.data.route;
+                for (let route of response.data) {
+                    startLatLng = [[route.source_point.lat, route.source_point.lng], [route.start_point.lat, route.start_point.lng]];
+                    targetLatLng = [[route.target_point.lat, route.target_point.lng], [route.end_point.lat, route.end_point.lng]];
+                    addDottedLine(startLatLng);
+                    addDottedLine(targetLatLng);
 
-                if (response.data.history)
-                    setRouteHistory(response.data.history);
-                else
-                    addGeoJSON(JSON.parse(response.data.route), 0, 0, 0, 0, "crimson", 3);
+                    if (route.branch)
+                        for (let branch of route.branch)
+                            addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance);
+
+                    time += route.time
+                    distance += route.distance
+                    downloadRoute.push(JSON.parse(route.route));
+
+                    if (route.history)
+                        setRouteHistory(route.history);
+                    else
+                        addGeoJSON(JSON.parse(route.route), 0, 0, 0, 0, "crimson", 3);
+                }
+
+                this.setRouteDetails(distance, this.formatTime(time));
+                this.routeDetailsDownload = JSON.stringify(downloadRoute);
+
             }).finally(() => {
                 this.$store.commit('SET_ROUTE_LOADING', false);
             });

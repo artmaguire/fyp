@@ -118,7 +118,7 @@ const startIcon = L.icon({
     });
 
 const map = L.map('mapid', {
-    zoomDelta: 0.25,
+    zoomDelta: 0.5,
     zoomSnap: 0
 }).setView([irelandView.x, irelandView.y], irelandView.zoom);
 
@@ -346,7 +346,6 @@ function changeMapToLight() {
         }
     });
     light.addTo(map);
-
 }
 
 let routeLayerGroup = L.layerGroup().addTo(map);

@@ -17,7 +17,7 @@ let nodeSearch = Vue.component('node-search', {
         searchSelected: function (result) {
             this.nodeInput = result.display_place;
             this.nodeData = result;
-            this.nodeData.id = this.id;
+            this.nodeData.id = this.index;
             this.$store.commit('SET_NODE', this.nodeData);
 
             removeGeoJSON()
