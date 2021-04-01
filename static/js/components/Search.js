@@ -109,7 +109,6 @@ let search = Vue.component('search', {
 
             // TODO: Update the search
             this.$store.commit('SET_NODE_MAP', nodeMap);
-            nodeSearch.updateSearchInputs(nodeMap.get(0))
 
             reverseMarkers(start['address']['name'], end['address']['name']);
         },

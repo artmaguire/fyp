@@ -117,7 +117,10 @@ const startIcon = L.icon({
         shadowAnchor: [4, 62]
     });
 
-const map = L.map('mapid', {}).setView([irelandView.x, irelandView.y], irelandView.zoom);
+const map = L.map('mapid', {
+    zoomDelta: 0.25,
+    zoomSnap: 0
+}).setView([irelandView.x, irelandView.y], irelandView.zoom);
 
 const defaultMap = document.cookie.match(/^(.*;)?\s*baseMap\s*=\s*[^;]+(.*)?$/);
 if (defaultMap === null) {
@@ -335,7 +338,15 @@ function getBoundsLngLat() {
 }
 
 function changeMapToLight() {
+    // Center of Ireland Coords - 53.4239° N, 7.9407° W
+    map.setView(L.latLng(53.4239, -7.9407), 7.5, {
+        "animate": true,
+        "pan": {
+            "duration": 1
+        }
+    });
     light.addTo(map);
+
 }
 
 let routeLayerGroup = L.layerGroup().addTo(map);
