@@ -72,6 +72,7 @@ def route():
     via3 = request.args.get('via3').split(',') if request.args.get('via3') != '' else []
     via4 = request.args.get('via4').split(',') if request.args.get('via4') != '' else []
     via5 = request.args.get('via5').split(',') if request.args.get('via5') != '' else []
+    flag = int(request.args.get('flag')) if request.args.get('flag') != '' else 1
 
     nodes = {
         0:  [float(source[0]), float(source[1])] if source != [] else source,
@@ -113,7 +114,8 @@ def route():
         source = nodes[i]
         target = nodes[i + 1] if i + 1 in nodes else nodes[-1]
 
-        algorithm_result = fn(source[0], source[1], target[0], target[1], visualisation=visualisation, history=False)
+        algorithm_result = fn(source[0], source[1], target[0], target[1], flag, visualisation=visualisation,
+                              history=False)
         algorithm_result['source_point'] = {'lat': source[0], 'lng': source[1]}
         algorithm_result['target_point'] = {'lat': target[0], 'lng': target[1]}
 

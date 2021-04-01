@@ -2,12 +2,12 @@ let search = Vue.component('search', {
     data: function () {
         return {
             additionalNodes: [],
-            activeType: 'driving',
             searchTypes: [
-                {type: 'driving', icon: 'fa-car'},
-                {type: 'cycling', icon: 'fa-bicycle'},
-                {type: 'walking', icon: 'fa-walking'},
-                {type: 'courier', icon: 'fa-truck'}],
+                {type: 'driving', icon: 'fa-car', flag: 1},
+                {type: 'cycling', icon: 'fa-bicycle', flag: 2},
+                {type: 'walking', icon: 'fa-walking', flag: 4},
+                {type: 'courier', icon: 'fa-truck', flag: 1}],
+            activeType: {},
             Algorithms: Algorithms,
             algorithmType: Algorithms.BI_ASTAR,
             visualisation: false,
@@ -42,7 +42,7 @@ let search = Vue.component('search', {
 
             removeGeoJSON()
 
-            this.$store.commit('SET_ROUTE_LOADING', true)
+            this.$store.commit('SET_ROUTE_LOADING', this.activeType.type)
 
             let nodeMap = this.$store.getters.getNodes;
 
@@ -57,7 +57,8 @@ let search = Vue.component('search', {
                     via5: (nodeMap.has(5)) ? nodeMap.get(5).lat + ',' + nodeMap.get(5).lon : '',
                     nodeMap: JSON.stringify(Array.from(nodeMap.entries())),
                     algorithmType: this.algorithmType,
-                    visualisation: this.visualisation ? 1 : 0
+                    visualisation: this.visualisation ? 1 : 0,
+                    flag: this.activeType.flag
                 }
             }).then(response => {
                 let err = response?.data?.error?.code;
@@ -98,7 +99,7 @@ let search = Vue.component('search', {
                 this.routeDetailsDownload = JSON.stringify(downloadRoute);
 
             }).finally(() => {
-                this.$store.commit('SET_ROUTE_LOADING', false);
+                this.$store.commit('SET_ROUTE_LOADING', null);
             });
             // displayRoute(this.additionalNodes.map(x => x.id));
         },
@@ -156,6 +157,9 @@ let search = Vue.component('search', {
             }
         }
     },
+    created: function () {
+        this.activeType = this.searchTypes[0];
+    },
     template: `
     <div v-bind:class="{ 'show-search-view': hideSearchView }" class="search-view">
         <div class="box search-view-content">
@@ -166,8 +170,8 @@ let search = Vue.component('search', {
                 <div class="card">
                     <div id="transport-icons">
                         <ul class="icon-text">
-                          <li v-for="searchType in searchTypes" @click="setActiveType(searchType.type)" v-bind:title="searchType.type" class="sv-icon"
-                            v-bind:class="{ 'sv-icon-active': activeType === searchType.type }">
+                          <li v-for="searchType in searchTypes" @click="setActiveType(searchType)" v-bind:title="searchType.type" class="sv-icon"
+                            v-bind:class="{ 'sv-icon-active': activeType.type === searchType.type }">
                             <i class="fas" :class="searchType.icon"></i>
                           </li>
                           <!-- TODO: Add more gifs for bus and truck? -->
