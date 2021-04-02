@@ -46,6 +46,7 @@ const main = new Vue({
 
         allRoadLeadToLimerick() {
             // Change map to light map
+            allRoads();
             changeMapToLight();
             console.log('paddy');
         }

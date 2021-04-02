@@ -412,6 +412,23 @@ function routeHistoryNext(count = 1) {
     }
 }
 
+function removeLeafletLayers() {
+    map.eachLayer(function (layer) {
+        map.removeLayer(layer);
+    });
+}
+
+function allRoads() {
+    removeGeoJSON();
+    // removeLeafletLayers();
+    changeMapToLight();
+
+    // TODO: read geojson from all_roads file and display on map
+    for (let road of all_roads)
+        for (let route of road)
+            addGeoJSON(JSON.parse(route.geojson), 0, 0, 0,0, '#2d456b', 1);
+}
+
 // j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
 //
 // for (let jj of j)
