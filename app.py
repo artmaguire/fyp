@@ -5,6 +5,7 @@ import requests
 from dfosm import DFOSM
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
+import concurrent.futures
 
 from constants import Algorithms
 
@@ -105,25 +106,21 @@ def route():
     else:
         fn = dfosm.a_star
 
-    results_list = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_results = []
 
-    for i in range(len(nodes)):
-        if i not in nodes:
-            break
+        for i in range(len(nodes)):
+            if i not in nodes:
+                break
 
-        source = nodes[i]
-        target = nodes[i + 1] if i + 1 in nodes else nodes[-1]
-
-        algorithm_result = fn(source[0], source[1], target[0], target[1], flag, visualisation=visualisation,
-                              history=False)
-        algorithm_result['source_point'] = {'lat': source[0], 'lng': source[1]}
-        algorithm_result['target_point'] = {'lat': target[0], 'lng': target[1]}
-
-        results_list.append(algorithm_result)
+            source = nodes[i]
+            target = nodes[i + 1] if i + 1 in nodes else nodes[-1]
+            future_results.append(
+                    executor.submit(fn, source[0], source[1], target[0], target[1], flag, visualisation, False))
 
     logger.info('********************   END   ROUTE   ********************')
 
-    return jsonify(results_list)
+    return jsonify([f.result() for f in future_results])
 
 
 if __name__ == '__main__':
