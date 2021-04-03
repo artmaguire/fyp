@@ -2,6 +2,11 @@
 // This can be reused for all node searches
 // Templating for searching
 let loadingScreen = Vue.component('loading-screen', {
+    data: function () {
+        return {
+            loadingTitle: 'Finding Route...'
+        }
+    },
     methods: {
         cancelRoute() {
             // Reloads the site
@@ -16,8 +21,11 @@ let loadingScreen = Vue.component('loading-screen', {
                 <button class="button cancel-route" title="Cancel route" @click="cancelRoute">
                     <i class="fa fa-times-circle"></i>
                 </button>
-                <h2 class="finding-route-text">
-                    Finding Route...
+                <h2 v-if="type === 'all_roads'" class="finding-route-text">
+                    'All Roads Lead to Limerick'
+                </h2>
+                <h2 v-else class="finding-route-text">
+                    {{ loadingTitle }}
                 </h2>
 
                 <div v-bind:class="[ type === 'walking' ? 'walking-gif' : 'gifs' ]" class="">

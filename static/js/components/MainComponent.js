@@ -48,8 +48,8 @@ const main = new Vue({
             // Change map to light map
             this.$store.commit('SET_ROUTE_LOADING', 'all_roads')
             setTimeout(() => {
-                this.isLoading = false
-            }, 1000);
+                this.$store.commit('SET_ROUTE_LOADING', null);
+            }, 3000);
 
             allRoads();
             changeMapToLight();

@@ -423,7 +423,6 @@ function allRoads() {
     // removeLeafletLayers();
     changeMapToLight();
 
-    // TODO: read geojson from all_roads file and display on map
     for (let road of all_roads)
         for (let route of road)
             addGeoJSON(JSON.parse(route.geojson), 0, 0, 0,0, '#2d456b', 1);
