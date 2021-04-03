@@ -52,7 +52,6 @@ const main = new Vue({
             }, 3000);
 
             allRoads();
-            changeMapToLight();
             console.log('paddy');
         }
     },

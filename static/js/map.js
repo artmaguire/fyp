@@ -412,20 +412,20 @@ function routeHistoryNext(count = 1) {
     }
 }
 
-function removeLeafletLayers() {
-    map.eachLayer(function (layer) {
-        map.removeLayer(layer);
-    });
+function removeAllMarkers() {
+    for (let markerId of markerMap.keys())
+        map.removeLayer(markerMap.get(markerId));
 }
 
 function allRoads() {
+    removeAllMarkers();
+    removeRoute();
     removeGeoJSON();
-    // removeLeafletLayers();
     changeMapToLight();
 
     for (let road of all_roads)
         for (let route of road)
-            addGeoJSON(JSON.parse(route.geojson), 0, 0, 0,0, '#2d456b', 1);
+            addGeoJSON(JSON.parse(route.geojson), 0, 0, 0, 0, '#2d456b', 1, false);
 }
 
 // j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
