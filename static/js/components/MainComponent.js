@@ -46,6 +46,11 @@ const main = new Vue({
 
         allRoadLeadToLimerick() {
             // Change map to light map
+            this.$store.commit('SET_ROUTE_LOADING', 'all_roads')
+            setTimeout(() => {
+                this.isLoading = false
+            }, 1000);
+
             allRoads();
             changeMapToLight();
             console.log('paddy');
@@ -70,7 +75,6 @@ const main = new Vue({
     
             <div id="mapid"></div>
             <search @loading="startLoading"></search>
-
 
             <div class="box all-roads-limerick-button" @click="allRoadLeadToLimerick">
                 <i class="all-roads-limerick-icon fas fa-road"></i>

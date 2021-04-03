@@ -4,8 +4,8 @@
 let loadingScreen = Vue.component('loading-screen', {
     methods: {
         cancelRoute() {
-            // TODO: Trigger cancel route
-            console.log('cancel');
+            // Reloads the site
+            window.location.reload(true);
         }
     },
     props: {type: String},
