@@ -83,16 +83,16 @@ let search = Vue.component('search', {
 
                     if (route.branch)
                         for (let branch of route.branch)
-                            addGeoJSON(JSON.parse(branch.route), branch.cost, branch.distance);
+                            addGeoJSON(branch.route, branch.cost, branch.distance);
 
                     time += route.time
                     distance += route.distance
-                    downloadRoute.push(JSON.parse(route.route));
+                    downloadRoute.push(route.route);
 
                     if (route.history)
                         setRouteHistory(route.history);
                     else
-                        addGeoJSON(JSON.parse(route.route), 0, 0, 0, 0, "crimson", 3);
+                        addGeoJSON(route.route, 0, 0, 0, 0, "crimson", 3);
                 }
 
                 this.setRouteDetails(distance, this.formatTime(time));
