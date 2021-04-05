@@ -406,7 +406,7 @@ function routeHistoryNext(count = 1) {
         let nodes = routeHistory[routeHistoryIndex]
 
         for (let node of nodes)
-            addGeoJSON(JSON.parse(node.geojson), cost = node.cost, totalCost = node.total_cost, distance = node.distance,
+            addGeoJSON(node.geojson, cost = node.cost, totalCost = node.total_cost, distance = node.distance,
                 distanceMinutes = node.distance_minutes, null, 3);
         routeHistoryIndex++;
     }
@@ -424,8 +424,7 @@ function allRoads() {
     changeMapToLight();
 
     for (let road of all_roads)
-        for (let route of road)
-            addGeoJSON(JSON.parse(route.geojson), 0, 0, 0, 0, '#2d456b', 1, false);
+        addGeoJSON(road.route, 0, 0, 0, 0, '#2d456b', 1, false);
 }
 
 // j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
