@@ -36,11 +36,11 @@ let search = Vue.component('search', {
                     text: 'You haven\'t selected enough locations!',
                     icon: 'error',
                     confirmButtonText: 'Ok'
-                }).then(r => console.log('Not enough nodes'));
+                }).then(() => console.log('Not enough nodes'));
                 return;
             }
 
-            removeGeoJSON()
+            removeGeoJSON();
 
             this.$store.commit('SET_ROUTE_LOADING', this.activeType.type)
 
@@ -68,7 +68,7 @@ let search = Vue.component('search', {
                         text: 'Could not find your route.',
                         icon: 'error',
                         confirmButtonText: 'Ok'
-                    }).then(r => console.log('Not enough nodes'));
+                    }).then(() => console.log('Not enough nodes'));
                     return;
                 }
 
@@ -115,9 +115,8 @@ let search = Vue.component('search', {
         reverseWayPoints() {
             let nodeMap = this.$store.getters.getNodes;
 
-            if (nodeMap.get(0) == null && nodeMap.get(-1) == null) {
+            if (nodeMap.get(0) == null && nodeMap.get(-1) == null)
                 return;
-            }
 
             let start = nodeMap.get(0);
             let end = nodeMap.get(-1);
@@ -128,6 +127,16 @@ let search = Vue.component('search', {
             this.$store.commit('SET_NODE_MAP', nodeMap);
 
             reverseMarkers(start['address']['name'], end['address']['name']);
+        },
+        clearRoute() {
+            //TODO: update the search
+            this.$store.commit('CLEAR_NODES');
+
+            removeAllMarkers();
+            removeRoute();
+            removeGeoJSON();
+
+            this.routeDetails = false;
         },
         setRouteDetails(distance, time) {
             this.routeDetails = true;
@@ -191,11 +200,14 @@ let search = Vue.component('search', {
                 </div>
                 <div id="checkbox-search-btn sv-container">
                     <div class="sv-item">
-                        <button disabled class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
+                        <button class="button add-node" title="Add location" @click="addNode" :disabled="additionalNodes.length >= 5">
                             <i class="fa fa-plus"></i>
                         </button>
                         <button class="button reverse-waypoints" title="Reverse waypoints" @click="reverseWayPoints">
                             <i class="fa fa-retweet"></i>
+                        </button>
+                        <button class="button reverse-waypoints" title="Clear route" @click="clearRoute">
+                            <i class="fa fa-times"></i>
                         </button>
                         <div id="search-btn">
                             <button id="go-button" title="Find route" class="button is-rounded" @click="goButtonClick">

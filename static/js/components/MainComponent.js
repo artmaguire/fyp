@@ -14,6 +14,9 @@ const store = new Vuex.Store({
         },
         SET_NODE_MAP(state, nodeMap) {
             state.nodes = nodeMap;
+        },
+        CLEAR_NODES(state) {
+            state.nodes = new Map();
         }
     },
     getters: {
@@ -43,7 +46,6 @@ const main = new Vue({
                 this.isLoading = false
             }, 1000);
         },
-
         allRoadLeadToLimerick() {
             // Change map to light map
             this.$store.commit('SET_ROUTE_LOADING', 'all_roads')

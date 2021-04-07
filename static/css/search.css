@@ -142,7 +142,8 @@ html, body {
     padding: 4px;
     font-size: 1.4rem;
     height: 100%;
-    margin: 4px auto 4px 8px;
+    display: inline;
+    margin: -1px;
 }
 
 #checkbox-search-btn {

@@ -418,6 +418,8 @@ function routeHistoryNext(count = 1) {
 function removeAllMarkers() {
     for (let markerId of markerMap.keys())
         map.removeLayer(markerMap.get(markerId));
+
+    markerMap.clear();
 }
 
 function allRoads() {
