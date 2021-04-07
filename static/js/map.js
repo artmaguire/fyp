@@ -126,7 +126,7 @@ const defaultMap = document.cookie.match(/^(.*;)?\s*baseMap\s*=\s*[^;]+(.*)?$/);
 if (defaultMap === null) {
     streets.addTo(map);
 } else {
-    const baseMap = getPreviousMap()
+    const baseMap = getPreviousMap();
     baseMaps[baseMap].addTo(map);
 }
 
@@ -166,16 +166,50 @@ let routingControl = null;
 // GeoJSON Layer
 let geoJSONLayer = null;
 
+let routeLayerGroup = L.layerGroup().addTo(map);
+
+colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
+    '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+    '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+    '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+    '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+    '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+    '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+    '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+    '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+    '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+];
+
+function setBaseMapCookie() {
+    let mapId = Object.entries(map._layers)[0][0];
+    let mapCookieString = "baseMap=";
+    for (let m of maps) {
+        if (m[1].options['id'] === map._layers[mapId].options['id']) {
+            document.cookie = mapCookieString += m[0];
+        }
+    }
+}
+
+function setLastSearchCookie() {
+    document.cookie = "lastSearch=" + getBoundsLngLat();
+}
+
+// Saves current map layer to cookie when the user leaves the page
+window.onbeforeunload = function () {
+    setBaseMapCookie();
+    setLastSearchCookie();
+};
+
 function locateUser() {
     map.locate({enableHighAccuracy: true})
         .on('locationfound', function (e) {
             userLocation = [e.latitude, e.longitude]
             map.setView([e.latitude, e.longitude], 12);
         })
-        .on('locationerror', function (e) {
+        .on('locationerror', function () {
             Swal.fire({
                 title: 'Location Denied',
-                text: 'To enable location services, Click allow location access in the browsers search bar.',
+                text: 'Location is disabled for this website.',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
@@ -315,23 +349,6 @@ function displayRoute(additionalNodes) {
     }).addTo(map);
 }
 
-// Saves current map layer to cookie when the user leaves the page
-window.onbeforeunload = function () {
-    let mapId = 0;
-    for (let m in map._layers) {
-        mapId = m;
-    }
-
-    let mapCookieString = "baseMap=";
-    for (let m of maps) {
-        if (m[1].options['id'] === map._layers[mapId].options['id']) {
-            document.cookie = mapCookieString += m[0];
-        }
-    }
-
-    document.cookie = "lastSearch=" + getBoundsLngLat();
-};
-
 function getBoundsLngLat() {
     return map.getBounds().toBBoxString();
 }
@@ -346,19 +363,6 @@ function changeMapToLight() {
     });
     light.addTo(map);
 }
-
-let routeLayerGroup = L.layerGroup().addTo(map);
-
-colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
-    '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
-    '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
-    '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-    '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
-    '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-    '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
-    '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-    '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
-    '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
 function addGeoJSON(routeGeoJSON, cost = 0, totalCost = 0, distance = 0, distanceMinutes = 0, color = null, weight = 1, popup = true) {
     if (!color)
