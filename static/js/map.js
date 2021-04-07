@@ -285,7 +285,7 @@ function panToNode(lat, lon) {
 
 function panToMarkers() {
     let group = new L.featureGroup(Array.from(markerMap.values()));
-    map.fitBounds(group.getBounds());
+    map.fitBounds(group.getBounds(), {padding: [200, 200]});
 }
 
 // Get the lat, lon for a given marker
