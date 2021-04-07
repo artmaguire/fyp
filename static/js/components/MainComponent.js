@@ -16,7 +16,7 @@ const store = new Vuex.Store({
             state.nodes = nodeMap;
         },
         CLEAR_NODES(state) {
-            state.nodes = new Map();
+            state.nodes.clear();
         }
     },
     getters: {
@@ -45,16 +45,6 @@ const main = new Vue({
             setTimeout(() => {
                 this.isLoading = false
             }, 1000);
-        },
-        allRoadLeadToLimerick() {
-            // Change map to light map
-            this.$store.commit('SET_ROUTE_LOADING', 'all_roads')
-            setTimeout(() => {
-                this.$store.commit('SET_ROUTE_LOADING', null);
-            }, 3000);
-
-            allRoads();
-            console.log('paddy');
         }
     },
     computed: {
@@ -76,10 +66,6 @@ const main = new Vue({
     
             <div id="mapid"></div>
             <search @loading="startLoading"></search>
-
-            <div class="box all-roads-limerick-button" @click="allRoadLeadToLimerick">
-                <i class="all-roads-limerick-icon fas fa-road"></i>
-            </div>
         </div>
     </div>`
 });

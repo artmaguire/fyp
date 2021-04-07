@@ -326,29 +326,6 @@ function getCoords(marker) {
     return L.latLng(marker['_latlng']['lat'], marker['_latlng']['lng'])
 }
 
-function displayRoute(additionalNodes) {
-    // Clears any existing routes
-    removeRoute()
-
-    let waypoints = []
-    waypoints.push(getCoords(markerMap.get(nodes.START)))
-
-    for (let id of additionalNodes) {
-        let marker = markerMap.get(id);
-        waypoints.push(getCoords(marker));
-    }
-
-    waypoints.push(getCoords(markerMap.get(nodes.END)))
-
-    routingControl = L.Routing.control({
-        router: L.Routing.mapbox(mapboxAccessToken),
-        waypoints: waypoints,
-        createMarker: function () {
-            return null;
-        }
-    }).addTo(map);
-}
-
 function getBoundsLngLat() {
     return map.getBounds().toBBoxString();
 }
@@ -421,18 +398,3 @@ function removeAllMarkers() {
 
     markerMap.clear();
 }
-
-function allRoads() {
-    removeAllMarkers();
-    removeRoute();
-    removeGeoJSON();
-    changeMapToLight();
-
-    for (let road of all_roads)
-        addGeoJSON(road.route, 0, 0, 0, 0, '#2d456b', 1, false);
-}
-
-// j = {"type":"MultiLineString","coordinates":[[[-9.7690467,52.6169353],[-9.7690297,52.6168969]]]}
-//
-// for (let jj of j)
-//     addGeoJSON(jj);
