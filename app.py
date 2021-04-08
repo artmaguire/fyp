@@ -1,20 +1,17 @@
-import json
+import concurrent.futures
 import logging
 
 import requests
 from dfosm import DFOSM
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
-import concurrent.futures
-
-from constants import Algorithms
 
 from config import conf
-import log_helper
+from constants import Algorithms
 
 logger = logging.getLogger('dfosm_server')
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="public")
 socketio = SocketIO(app)
 
 dfosm = DFOSM(threads=conf.THREADS, timeout=conf.TIMEOUT, dbname=conf.DBNAME, dbuser=conf.DBUSER,

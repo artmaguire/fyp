@@ -4,5 +4,6 @@ __pycache__/
 node_modules/
 deps/
 logs/
+public/
 
 .env
