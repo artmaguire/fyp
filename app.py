@@ -1,5 +1,4 @@
 import concurrent.futures
-import logging
 
 import requests
 from dfosm import DFOSM
@@ -8,8 +7,7 @@ from flask_socketio import SocketIO, emit
 
 from config import conf
 from constants import Algorithms
-
-logger = logging.getLogger('dfosm_server')
+from log_helper import logger
 
 app = Flask(__name__, static_url_path="", static_folder="public")
 socketio = SocketIO(app)

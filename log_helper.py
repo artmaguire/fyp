@@ -5,19 +5,19 @@ import sys
 pathlib.Path("logs").mkdir(parents=True, exist_ok=True)
 
 
-log = logging.getLogger('werkzeug')
+flask_logger = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
 fh = logging.FileHandler('logs/flask.log')
 fh.setLevel(logging.DEBUG)
-log.addHandler(fh)
+flask_logger.addHandler(fh)
 
-logger = logging.getLogger('dfosm')
-logger.setLevel(logging.DEBUG)
+dfosm_logger = logging.getLogger('dfosm')
+dfosm_logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler('logs/dfosm-star.log')
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 fh.setLevel(logging.DEBUG)
-logger.addHandler(fh)
+dfosm_logger.addHandler(fh)
 
 logger = logging.getLogger('dfosm_server')
 logger.setLevel(logging.DEBUG)
