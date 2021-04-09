@@ -44,6 +44,31 @@ def handle_geoname(data):
     emit('geoname_result', result)
 
 
+@socketio.on('reverse_geoname_search')
+def handle_reverse_geoname(data):
+    logger.debug('********************   START SEARCH   ********************')
+    logger.debug(str(data))
+
+    query = "https://us1.locationiq.com/v1/reverse.php"
+
+    params = {
+        'lat':    data.get('lat'),
+        'lon':    data.get('lon'),
+        'key':    conf.LOCATIONIQ_API_KEY,
+        'format': 'json',
+        'limit':  3
+    }
+
+    res = requests.get(query, params)
+    result = {"action": data.get("action"), "geoname": res.json()}
+    result["geoname"]["display_place"] = result["geoname"]["display_name"].split(',')[0]
+
+    logger.debug(str(result))
+    logger.debug('********************   END   SEARCH   ********************')
+
+    emit('reverse_geoname_result', result)
+
+
 @app.route('/')
 def home():
     return app.send_static_file('index.html')
