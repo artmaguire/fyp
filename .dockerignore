@@ -1,0 +1,6 @@
+.git/
+.idea/
+venv/
+logs/
+__pycache__/
+public/
