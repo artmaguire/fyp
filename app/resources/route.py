@@ -4,7 +4,7 @@ import logging
 
 from dfosm import DFOSM
 from flask import jsonify
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, inputs
 from werkzeug.exceptions import BadRequest
 
 from app.utilities.config import conf
@@ -25,8 +25,8 @@ class Route(Resource):
         self.parser.add_argument('additionalNodes', default="[]")
         self.parser.add_argument('algorithmType', type=int, default=Algorithms.BI_ASTAR.value)
         self.parser.add_argument('flag', type=int, choices=(1, 2, 4), default=1)
-        self.parser.add_argument('visualisation', type=bool, default=False)
-        self.parser.add_argument('history', type=bool, default=False)
+        self.parser.add_argument('visualisation', type=inputs.boolean, default=False)
+        self.parser.add_argument('history', type=inputs.boolean, default=False)
 
     def get(self):
         logger.info('********************   START ROUTE   ********************')
