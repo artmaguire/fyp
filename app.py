@@ -61,7 +61,8 @@ def handle_reverse_geoname(data):
 
     res = requests.get(query, params)
     result = {"action": data.get("action"), "geoname": res.json()}
-    result["geoname"]["display_place"] = result["geoname"]["display_name"].split(',')[0]
+    result["geoname"]["display_place"] = result["geoname"]["display_name"].split(',')[0] + ', ' + \
+                                         result["geoname"]["display_name"].split(',')[1]
 
     logger.debug(str(result))
     logger.debug('********************   END   SEARCH   ********************')
