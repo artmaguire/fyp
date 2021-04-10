@@ -1,0 +1,82 @@
+import concurrent.futures
+import json
+import logging
+
+from dfosm import DFOSM
+from flask import jsonify
+from flask_restful import Resource, reqparse
+from werkzeug.exceptions import BadRequest
+
+from app.utilities.config import conf
+from app.utilities.constants import Algorithms
+
+logger = logging.getLogger('dfosm_server')
+
+dfosm = DFOSM(threads=conf.THREADS, timeout=conf.TIMEOUT, dbname=conf.DBNAME, dbuser=conf.DBUSER,
+              dbpassword=conf.DBPASSWORD, dbhost=conf.DBHOST, dbport=conf.DBPORT, edges_table=conf.EDGES_TABLE,
+              vertices_table=conf.VERTICES_TABLE)
+
+
+class Route(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('source', required=True)
+        self.parser.add_argument('target', required=True)
+        self.parser.add_argument('additionalNodes', type=list, default=[])
+        self.parser.add_argument('algorithmType', type=int, default=Algorithms.BI_ASTAR.value)
+        self.parser.add_argument('flag', type=int, choices=(1, 2, 4), default=1)
+        self.parser.add_argument('visualisation', type=bool, default=False)
+        self.parser.add_argument('history', type=bool, default=False)
+
+    def get(self):
+        logger.info('********************   START ROUTE   ********************')
+        args = self.parser.parse_args()
+        print(args)
+
+        try:
+            source = json.loads(args.source)
+        except json.decoder.JSONDecodeError:
+            logger.error(f"source: {args.source} is not valid JSON.")
+            raise BadRequest(f"source: {args.source} is not valid JSON.")
+        try:
+            target = json.loads(args.target)
+        except json.decoder.JSONDecodeError:
+            logger.error(f"target: {args.target} is not valid JSON.")
+            raise BadRequest(f"target: {args.target} is not valid JSON.")
+
+        nodes = {
+            0: [float(source["lat"]), float(source["lng"])],
+            -1: [float(target["lat"]), float(target["lng"])]
+        }
+
+        logger.info(f'Algorithm: {args.algorithmType}')
+        logger.info(f'Visualisation: {args.visualisation}')
+        logger.info(f'Nodes: {str(nodes)}')
+
+        if args.algorithmType == Algorithms.DIJKSTRA.value:
+            fn = dfosm.dijkstra
+        elif args.algorithmType == Algorithms.BI_DIJKSTRA.value:
+            fn = dfosm.bi_dijkstra
+        elif args.algorithmType == Algorithms.ASTAR.value:
+            fn = dfosm.a_star
+        elif args.algorithmType == Algorithms.BI_ASTAR.value:
+            fn = dfosm.bi_a_star
+        else:
+            fn = dfosm.a_star
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_results = []
+
+            for i in range(len(nodes)):
+                if i not in nodes:
+                    break
+
+                source = nodes[i]
+                target = nodes[i + 1] if i + 1 in nodes else nodes[-1]
+                future_results.append(
+                    executor.submit(fn, source[0], source[1], target[0], target[1], args.flag, args.visualisation,
+                                    args.history))
+
+        logger.info('********************   END   ROUTE   ********************')
+
+        return jsonify([f.result() for f in future_results])
