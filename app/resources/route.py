@@ -22,7 +22,7 @@ class Route(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('source', required=True)
         self.parser.add_argument('target', required=True)
-        self.parser.add_argument('additionalNodes', type=list, default=[])
+        self.parser.add_argument('additionalNodes', default="[]")
         self.parser.add_argument('algorithmType', type=int, default=Algorithms.BI_ASTAR.value)
         self.parser.add_argument('flag', type=int, choices=(1, 2, 4), default=1)
         self.parser.add_argument('visualisation', type=bool, default=False)
@@ -43,11 +43,20 @@ class Route(Resource):
         except json.decoder.JSONDecodeError:
             logger.error(f"target: {args.target} is not valid JSON.")
             raise BadRequest(f"target: {args.target} is not valid JSON.")
+        try:
+            additional_nodes = json.loads(args.additionalNodes)
+        except json.decoder.JSONDecodeError:
+            logger.error(f"additionalNodes: {args.additionalNodes} is not valid JSON.")
+            raise BadRequest(f"additionalNodes: {args.additionalNodes} is not valid JSON.")
 
-        nodes = {
-            0: [float(source["lat"]), float(source["lng"])],
-            -1: [float(target["lat"]), float(target["lng"])]
-        }
+        try:
+            nodes = [(float(source["lat"]), float(source["lng"]))]
+            for node in additional_nodes:
+                nodes.append((float(node["lat"]), float(node["lng"])))
+            nodes.append((float(target["lat"]), float(target["lng"])))
+        except KeyError:
+            logger.error(f"additionalNode: {additional_nodes} missing lat / lng.")
+            raise BadRequest(f"additionalNode: {additional_nodes} missing lat / lng.")
 
         logger.info(f'Algorithm: {args.algorithmType}')
         logger.info(f'Visualisation: {args.visualisation}')
@@ -67,12 +76,9 @@ class Route(Resource):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future_results = []
 
-            for i in range(len(nodes)):
-                if i not in nodes:
-                    break
-
+            for i in range(len(nodes) - 1):
                 source = nodes[i]
-                target = nodes[i + 1] if i + 1 in nodes else nodes[-1]
+                target = nodes[i + 1]
                 future_results.append(
                     executor.submit(fn, source[0], source[1], target[0], target[1], args.flag, args.visualisation,
                                     args.history))
