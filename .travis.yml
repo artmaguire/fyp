@@ -7,11 +7,11 @@ env:
 install:
   - pip install -r requirements.txt
 script:
-  - ls -lh
+  - ls -lh ${TRAVIS_BUILD_DIR}
 before_deploy:
   - cd scripts && bash asset_download.sh ${TOKEN}
-  - cd ${REPO}/..
-  - tar -czf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz ${REPO}
+  - cd ${TRAVIS_BUILD_DIR}/..
+  - tar -czf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz $TRAVIS_BUILD_DIR
 deploy:
   # Github
   - provider: releases
