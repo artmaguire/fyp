@@ -35,4 +35,4 @@ after_deploy:
   - scp -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
   - ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
   - ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"
-  - ssh ubuntu@dfosm.eu "docker-compose up -d"
+  - ssh ubuntu@dfosm.eu "docker-compose up -d --build --force-recreate dfosm"
