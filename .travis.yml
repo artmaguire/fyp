@@ -1,0 +1,24 @@
+language: python
+python:
+  - "3.9"
+env:
+  global:
+    - secure: "w8KKGK0oUlrkWsi2dbzaWQ7mxLffwMhXStdo62snkvzDRYxeb4J2WtTtocad++pOLUeV5sIeAdGrsVxkx9wSIbYy3CYPEcbaGKBbuleuUGNTePXGQx+ZqTrc9HJ7D2fCaP+BQb2ndsA5953rC1gmCBMfoovmCR9874dxRXqWKQE53dq+XO/gqAqtNVFIg5Qz9eXJYo4CRnbJWAE1Mn/loFMN5mRXFYZY+kJ9Ogkw0zoEDkETYACwTIUcpSgqVTLqid5LNlgFEZeUh5aaG/b2at3hc18cSZTjgOhC0hDvHkY6GfjO9p0MVDA+eLo5wsBL/0OQkTjbGrMEGy1LfatwGw8Og+JGRYSGldTEDsD4m7lGwDMxveqBwfc0S2lmD4li/LWcX1ynpTtvqKgNbkrG3Qx+lPY6FATWg//OtZrtD3gbfWpki5W9Jo2G01POw1hGKJl7s761xyGOZQuK9g2WIL7PkAfCJ3sxG4u8zTDh/nzr/nnUKWblwZVPEBnL2IUbxZcgkHjj4hV6ZRh7FS9Dph7jiidQjAy9kn5irGAxuKrfKlH9jgb7JEFINyh4cKZOqwkwylQAlvaB6lMbeGSmHoDt2ckAdM/0zuMw1GEOalvINTVwKO4Hzj9mjiXmRIDG3e8d16ppUSur1m+iLHQAKzKBGnwvgL8eqRuxXnXhhdc="
+install:
+  - pip install -r requirements.txt
+script:
+  - ls -lh
+before_deploy:
+  - cd scripts && bash asset_download.sh ${TOKEN}
+  - cd ${REPO}/..
+  - tar -czf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz ${REPO}
+deploy:
+  # Github
+  - provider: releases
+    api_key:
+      secure: "PYpB6UZje1uzgIkaxCAyFafU5+Sd0mI9jquscrKKw0SXgn3ewi7viQ5GADJ+lnqtj/2jGV9pX/NX3YaMbr/IBgy3a/n1WbewU5V/h4kMz3eWXl26nvPGfU90DpsCGTrTIOaqomeW6j7XSJnIzmNNCXFeJlXNorFdG98mdwZMiAbCvspF4Sp6VFO+dgZB9S+wsOxat/txJPGosshWapggFTDW3PPLgmccSqmctHRHArLA1OO2cBFTvsNknI8qxgG/z4akmCO8Z4jwH1aHNBrOxDdpcLbHvKQ65FI8bUKlCnh4aelAE5JRXhmyfquiUSX4ukw1K0J8kqwhUAtlvwGwzIboY7h/F4wOfXrmnRy+JKvfBVyiFLOXt8acxZnOcAuIoBVhNXmzVbv9z4BQZI7WTI1AaQobccnwA8YmxA30BMVYWLWV5fD+t24o4IPVTMvZlXXuO0zNSQ4Wi2PbbISigKDTXnipqZ1yXHnLIcvN2yCZRwUDBj3/Ymmf+lOxRHHaQlq301dt6T6tFdZKNmF25bZMCtq132ncbZINLtl1Nox6lMqofkFLBsOh48uT2Nj6CXRRaBKQlOvrlSY4Yi8An2sgfCvhv+uPFpuLoFfvFc8aMrwxOc5K+ZxLP+YmH46pI6XZELB7kgSo8N6CurEdF17ZF3QlSs/OAbvzsjQi3QQ="
+    file_glob: true
+    file: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+    skip_cleanup: true
+    on:
+      tags: true
