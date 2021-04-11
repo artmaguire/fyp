@@ -10,13 +10,12 @@ before_install:
 install:
 - pip install -r requirements.txt
 script:
-- ls -lh ${TRAVIS_BUILD_DIR}/.travis
+- ls -lh
 - cd scripts
 - bash asset_download.sh ${TOKEN}
 - cd ..
 - echo $TRAVIS_TAG
 - docker build -t artmaguire/dfosm:${TRAVIS_TAG} -t artmaguire/dfosm:latest .
-after_success:
 - docker save artmaguire/dfosm:latest | gzip > dfosm_docker-$TRAVIS_TAG.tar.gz
 - scp -i id_rsa -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
 - ssh -i id_rsa ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
