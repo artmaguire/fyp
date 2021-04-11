@@ -14,7 +14,8 @@ script:
 - cd scripts
 - bash asset_download.sh ${TOKEN}
 - cd ..
-- docker build -t artmaguire/dfosm:$TRAVIS_TAG -t artmaguire/dfosm:latest .
+- echo $TRAVIS_TAG
+- docker build -t artmaguire/dfosm:${TRAVIS_TAG} -t artmaguire/dfosm:latest .
 after_success:
 - docker save artmaguire/dfosm:latest | gzip > dfosm_docker-$TRAVIS_TAG.tar.gz
 - scp -i id_rsa -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
