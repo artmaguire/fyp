@@ -13,7 +13,6 @@ before_deploy:
   - cd scripts && bash asset_download.sh ${TOKEN}
   - cd $TRAVIS_BUILD_DIR/..
   - export REPO=$($TRAVIS_REPO_SLUG | cut -f 2 -d /)
-  - echo $REPO
   - tar -czf $REPO-$TRAVIS_TAG-$TRAVIS_BUILD_NUMBER.tar.gz $REPO
 deploy:
   # Github
