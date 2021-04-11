@@ -8,17 +8,18 @@ install:
   - pip install -r requirements.txt
 script:
   - ls -lh ${TRAVIS_BUILD_DIR}
+  - echo ${REPO}
 before_deploy:
   - cd scripts && bash asset_download.sh ${TOKEN}
   - cd ${TRAVIS_BUILD_DIR}/..
-  - tar -czf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz $TRAVIS_BUILD_DIR
+  - tar -czf ${REPO}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz ${REPO}
 deploy:
   # Github
   - provider: releases
     api_key:
       secure: "PYpB6UZje1uzgIkaxCAyFafU5+Sd0mI9jquscrKKw0SXgn3ewi7viQ5GADJ+lnqtj/2jGV9pX/NX3YaMbr/IBgy3a/n1WbewU5V/h4kMz3eWXl26nvPGfU90DpsCGTrTIOaqomeW6j7XSJnIzmNNCXFeJlXNorFdG98mdwZMiAbCvspF4Sp6VFO+dgZB9S+wsOxat/txJPGosshWapggFTDW3PPLgmccSqmctHRHArLA1OO2cBFTvsNknI8qxgG/z4akmCO8Z4jwH1aHNBrOxDdpcLbHvKQ65FI8bUKlCnh4aelAE5JRXhmyfquiUSX4ukw1K0J8kqwhUAtlvwGwzIboY7h/F4wOfXrmnRy+JKvfBVyiFLOXt8acxZnOcAuIoBVhNXmzVbv9z4BQZI7WTI1AaQobccnwA8YmxA30BMVYWLWV5fD+t24o4IPVTMvZlXXuO0zNSQ4Wi2PbbISigKDTXnipqZ1yXHnLIcvN2yCZRwUDBj3/Ymmf+lOxRHHaQlq301dt6T6tFdZKNmF25bZMCtq132ncbZINLtl1Nox6lMqofkFLBsOh48uT2Nj6CXRRaBKQlOvrlSY4Yi8An2sgfCvhv+uPFpuLoFfvFc8aMrwxOc5K+ZxLP+YmH46pI6XZELB7kgSo8N6CurEdF17ZF3QlSs/OAbvzsjQi3QQ="
     file_glob: true
-    file: ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+    file: ${REPO}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
     skip_cleanup: true
     on:
       tags: true
