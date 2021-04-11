@@ -33,6 +33,8 @@ after_deploy:
   - chmod 600 id_rsa
   - ssh-add id_rsa
   - scp -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
-  - ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
-  - ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"
-  - ssh ubuntu@dfosm.eu "docker-compose up -d --build --force-recreate dfosm"
+  - ssh ubuntu@dfosm.eu "docker stop dfosm && docker container rm dfosm"        # Stop and remove any existing container
+  - ssh ubuntu@dfosm.eu "docker image rm artmaguire/dfosm:latest"               # Remove any existing dfosm docker image
+  - ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"   # Load new latest dfosm docker image
+  - ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"                    # Remove the image tar
+  - ssh ubuntu@dfosm.eu "docker-compose up -d"                                  # Create dfosm container using docker-compose.yml file on the server
