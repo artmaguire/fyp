@@ -11,16 +11,7 @@ script:
 - cd scripts
 - bash asset_download.sh ${TOKEN}
 - cd ..
-- docker build -t artmaguire/dfosm:test.0.1 -t artmaguire/dfosm:latest .
-- docker save artmaguire/dfosm:latest | gzip > dfosm_docker-$TRAVIS_TAG.tar.gz
-- openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv
-  -in .travis/id_rsa.enc -out id_rsa -d
-- chmod 600 id_rsa
-- ssh-add id_rsa
-- scp -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
-- ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
-- ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"
-- ssh ubuntu@dfosm.eu "docker-compose up -d"
+- docker build -t artmaguire/dfosm:latest .
 before_deploy:
 - export REPO=$(echo $TRAVIS_REPO_SLUG | cut -f 2 -d /)
 - cd ..
@@ -34,3 +25,14 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+after_deploy:
+  - docker tag artmaguire/dfosm $TRAVIS_TAG
+  - docker save artmaguire/dfosm:latest | gzip > dfosm_docker-$TRAVIS_TAG.tar.gz
+  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv
+    -in .travis/id_rsa.enc -out id_rsa -d
+  - chmod 600 id_rsa
+  - ssh-add id_rsa
+  - scp -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
+  - ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
+  - ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"
+  - ssh ubuntu@dfosm.eu "docker-compose up -d"
