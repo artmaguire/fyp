@@ -13,8 +13,9 @@ script:
   - cd ..
   - docker build .
 before_deploy:
+  - export REPO=$(echo $TRAVIS_REPO_SLUG | cut -f 2 -d /)
+  - cd ..
   - pwd
-  - export REPO=$($TRAVIS_REPO_SLUG | cut -f 2 -d /)
   - echo $REPO
   - ls -lh $REPO
   - tar -czf $REPO-$TRAVIS_TAG-$TRAVIS_BUILD_NUMBER.tar.gz $REPO
