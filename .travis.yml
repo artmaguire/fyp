@@ -11,21 +11,24 @@ script:
   - cd scripts
   - bash asset_download.sh ${TOKEN}
   - cd ..
-  - docker build .
+  - docker build -t artmaguire/dfosm:$TRAVIS_TAG -t artmaguire/dfosm:latest .
+after_success:
+  - docker save artmaguire/dfosm:latest | gzip > dfosm_docker-$TRAVIS_TAG.tar.gz
+  - scp -o StrictHostKeyChecking=no dfosm_docker-$TRAVIS_TAG.tar.gz ubuntu@dfosm.eu:~/
+  - ssh ubuntu@dfosm.eu "docker load --input dfosm_docker-$TRAVIS_TAG.tar.gz"
+  - ssh ubuntu@dfosm.eu "rm dfosm_docker-$TRAVIS_TAG.tar.gz"
+  - ssh ubuntu@dfosm.eu "docker-compose up -d"
 before_deploy:
   - export REPO=$(echo $TRAVIS_REPO_SLUG | cut -f 2 -d /)
   - cd ..
-  - pwd
-  - echo $REPO
-  - ls -lh $REPO
-  - tar -czf $REPO-$TRAVIS_TAG-$TRAVIS_BUILD_NUMBER.tar.gz $REPO
+  - tar -czf $REPO-$TRAVIS_TAG.tar.gz $REPO
 deploy:
   # Github
   - provider: releases
     api_key:
       secure: "PYpB6UZje1uzgIkaxCAyFafU5+Sd0mI9jquscrKKw0SXgn3ewi7viQ5GADJ+lnqtj/2jGV9pX/NX3YaMbr/IBgy3a/n1WbewU5V/h4kMz3eWXl26nvPGfU90DpsCGTrTIOaqomeW6j7XSJnIzmNNCXFeJlXNorFdG98mdwZMiAbCvspF4Sp6VFO+dgZB9S+wsOxat/txJPGosshWapggFTDW3PPLgmccSqmctHRHArLA1OO2cBFTvsNknI8qxgG/z4akmCO8Z4jwH1aHNBrOxDdpcLbHvKQ65FI8bUKlCnh4aelAE5JRXhmyfquiUSX4ukw1K0J8kqwhUAtlvwGwzIboY7h/F4wOfXrmnRy+JKvfBVyiFLOXt8acxZnOcAuIoBVhNXmzVbv9z4BQZI7WTI1AaQobccnwA8YmxA30BMVYWLWV5fD+t24o4IPVTMvZlXXuO0zNSQ4Wi2PbbISigKDTXnipqZ1yXHnLIcvN2yCZRwUDBj3/Ymmf+lOxRHHaQlq301dt6T6tFdZKNmF25bZMCtq132ncbZINLtl1Nox6lMqofkFLBsOh48uT2Nj6CXRRaBKQlOvrlSY4Yi8An2sgfCvhv+uPFpuLoFfvFc8aMrwxOc5K+ZxLP+YmH46pI6XZELB7kgSo8N6CurEdF17ZF3QlSs/OAbvzsjQi3QQ="
     file_glob: true
-    file: ${REPO}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+    file: $REPO-$TRAVIS_TAG.tar.gz
     skip_cleanup: true
     on:
       tags: true
