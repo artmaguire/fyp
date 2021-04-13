@@ -9,6 +9,7 @@ COPY . .
 RUN pip install -r requirements.txt
 RUN pip install deps/dfosm*.whl
 RUN tar -xzf deps/public.tar.gz
+RUN mv .env.sample .env
 RUN mkdir -p /app/logs
 EXPOSE 5000
 CMD ["flask", "run"]
