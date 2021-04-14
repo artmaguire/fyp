@@ -4,7 +4,7 @@ import logging
 
 from dfosm import DFOSM
 from flask import jsonify
-from flask_restful import Resource, reqparse, inputs
+from flask_restful import Resource, inputs, reqparse
 from werkzeug.exceptions import BadRequest
 
 from app.utilities.config import conf
@@ -12,7 +12,7 @@ from app.utilities.constants import Algorithms
 
 logger = logging.getLogger('dfosm_server')
 
-dfosm = DFOSM(threads=conf.THREADS, timeout=conf.TIMEOUT, dbname=conf.DBNAME, dbuser=conf.DBUSER,
+dfosm = DFOSM(threads=conf.THREADS, timeout=3600, dbname=conf.DBNAME, dbuser=conf.DBUSER,
               dbpassword=conf.DBPASSWORD, dbhost=conf.DBHOST, dbport=conf.DBPORT, edges_table=conf.EDGES_TABLE,
               vertices_table=conf.VERTICES_TABLE)
 
@@ -31,7 +31,6 @@ class Route(Resource):
     def get(self):
         logger.info('********************   START ROUTE   ********************')
         args = self.parser.parse_args()
-        print(args)
 
         try:
             source = json.loads(args.source)
@@ -58,8 +57,10 @@ class Route(Resource):
             logger.error(f"additionalNode: {additional_nodes} missing lat / lng.")
             raise BadRequest(f"additionalNode: {additional_nodes} missing lat / lng.")
 
+        visualisation = args.visualisation if not args.history else False
+
         logger.info(f'Algorithm: {args.algorithmType}')
-        logger.info(f'Visualisation: {args.visualisation}')
+        logger.info(f'Visualisation: {visualisation}')
         logger.info(f'Nodes: {str(nodes)}')
 
         if args.algorithmType == Algorithms.DIJKSTRA.value:
@@ -80,8 +81,8 @@ class Route(Resource):
                 source = nodes[i]
                 target = nodes[i + 1]
                 future_results.append(
-                    executor.submit(fn, source[0], source[1], target[0], target[1], args.flag, args.visualisation,
-                                    args.history))
+                        executor.submit(fn, source[0], source[1], target[0], target[1], args.flag, visualisation,
+                                        args.history))
 
         logger.info('********************   END   ROUTE   ********************')
 
