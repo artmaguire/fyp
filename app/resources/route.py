@@ -24,7 +24,7 @@ class Route(Resource):
         self.parser.add_argument('target', required=True)
         self.parser.add_argument('additionalNodes', default="[]")
         self.parser.add_argument('algorithmType', type=int, default=Algorithms.BI_ASTAR.value)
-        self.parser.add_argument('flag', type=int, choices=(1, 2, 4), default=1)
+        self.parser.add_argument('flag', type=int, choices=(1, 2, 4, -1), default=1)
         self.parser.add_argument('visualisation', type=inputs.boolean, default=False)
         self.parser.add_argument('history', type=inputs.boolean, default=False)
 
@@ -62,6 +62,7 @@ class Route(Resource):
         logger.info(f'Algorithm: {args.algorithmType}')
         logger.info(f'Visualisation: {visualisation}')
         logger.info(f'Nodes: {str(nodes)}')
+        logger.info(f'Transport Mode: {args.flag}')
 
         if args.algorithmType == Algorithms.DIJKSTRA.value:
             fn = dfosm.dijkstra
