@@ -12,7 +12,7 @@ from app.utilities.constants import Algorithms
 
 logger = logging.getLogger('dfosm_server')
 
-dfosm = DFOSM(threads=conf.THREADS, timeout=3600, dbname=conf.DBNAME, dbuser=conf.DBUSER,
+dfosm = DFOSM(threads=conf.THREADS, timeout=conf.TIMEOUT, dbname=conf.DBNAME, dbuser=conf.DBUSER,
               dbpassword=conf.DBPASSWORD, dbhost=conf.DBHOST, dbport=conf.DBPORT, edges_table=conf.EDGES_TABLE,
               vertices_table=conf.VERTICES_TABLE)
 
